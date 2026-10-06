@@ -1,0 +1,24 @@
+Lecture+ — composants du moteur de voix naturelle (dossier voix/)
+==================================================================
+
+Ces fichiers ne sont chargés que si l’utilisateur choisit la « voix naturelle Lecture+ ».
+Ils sont distribués séparément de l’application (index.html, licence CC BY-NC 4.0).
+
+1. ONNX Runtime Web 1.20.1 — ort.wasm.min.js, ort-wasm-simd-threaded.mjs, ort-wasm-simd-threaded.wasm
+   © Microsoft Corporation — Licence MIT
+   https://github.com/microsoft/onnxruntime
+
+2. piper-phonemize (compilation WebAssembly @diffusionstudio/piper-wasm 1.0.0) — piper_phonemize.js, piper_phonemize.wasm
+   © Michael Hansen (rhasspy), Diffusion Studio — Licence MIT
+   https://github.com/rhasspy/piper-phonemize — https://github.com/diffusion-studio/piper-wasm
+
+3. espeak-ng (intégré à piper_phonemize.wasm et à piper_phonemize.data, données réduites au français)
+   © Reece H. Dunn et contributeurs — Licence GNU GPL version 3 ou ultérieure
+   Code source : https://github.com/rhasspy/espeak-ng — https://github.com/espeak-ng/espeak-ng
+   Le fichier piper_phonemize.data a été réduit aux seules données nécessaires au français
+   (dictionnaire fr_dict, phonèmes et paramètres de langue), sans autre modification.
+
+4. piper-worker.js — © Tom Rougeaud, licence CC BY-NC 4.0 (comme Lecture+).
+
+5. Modèles de voix Piper (téléchargés à la demande, non inclus ici)
+   https://huggingface.co/rhasspy/piper-voices — chaque voix possède sa propre licence (voir son MODEL_CARD).
