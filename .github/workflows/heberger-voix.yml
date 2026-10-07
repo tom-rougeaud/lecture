@@ -1,0 +1,45 @@
+name: Héberger les voix naturelles sur le site
+
+# Télécharge les modèles de voix Piper depuis Hugging Face et les ajoute au dépôt (voix/modeles/).
+# Ensuite, Lecture+ ne contacte plus aucun service extérieur pour la voix naturelle.
+on:
+  workflow_dispatch:
+    inputs:
+      voix:
+        description: "Voix à héberger"
+        type: choice
+        options: [siwis-medium, toutes]
+        default: siwis-medium
+
+permissions:
+  contents: write
+
+jobs:
+  voix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Télécharger les modèles
+        run: |
+          set -euo pipefail
+          mkdir -p voix/modeles
+          base=https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR
+          dl() {
+            curl -fsSL --retry 3 "$base/$1/$2.onnx" -o "voix/modeles/$2.onnx"
+            curl -fsSL --retry 3 "$base/$1/$2.onnx.json" -o "voix/modeles/$2.onnx.json"
+            curl -fsSL --retry 3 "$base/$1/MODEL_CARD" -o "voix/modeles/$2.LICENCE.txt"
+          }
+          dl siwis/medium fr_FR-siwis-medium
+          if [ "${{ inputs.voix }}" = "toutes" ]; then
+            dl siwis/low fr_FR-siwis-low
+            dl upmc/medium fr_FR-upmc-medium
+          fi
+          ls -la voix/modeles
+      - name: Enregistrer dans le dépôt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add voix/modeles
+          if git diff --cached --quiet; then echo "Rien de nouveau."; exit 0; fi
+          git commit -m "Voix naturelles hébergées sur le site (voix/modeles)"
+          git push

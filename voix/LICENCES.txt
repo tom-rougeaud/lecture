@@ -14,11 +14,20 @@ Ils sont distribués séparément de l’application (index.html, licence CC BY-
 
 3. espeak-ng (intégré à piper_phonemize.wasm et à piper_phonemize.data, données réduites au français)
    © Reece H. Dunn et contributeurs — Licence GNU GPL version 3 ou ultérieure
-   Code source : https://github.com/rhasspy/espeak-ng — https://github.com/espeak-ng/espeak-ng
+   Code source de la version compilée ici : paquet npm @diffusionstudio/piper-wasm 1.0.0
+   (https://www.npmjs.com/package/@diffusionstudio/piper-wasm), construit à partir de
+   https://github.com/rhasspy/espeak-ng et https://github.com/wide-video/piper-phonemize selon la recette
+   publiée dans https://github.com/diffusion-studio/piper-wasm (README). Le code source correspondant est
+   également fourni sur simple demande à l’auteur de Lecture+, conformément à la GPL-3.0.
    Le fichier piper_phonemize.data a été réduit aux seules données nécessaires au français
    (dictionnaire fr_dict, phonèmes et paramètres de langue), sans autre modification.
 
 4. piper-worker.js — © Tom Rougeaud, licence CC BY-NC 4.0 (comme Lecture+).
 
-5. Modèles de voix Piper (téléchargés à la demande, non inclus ici)
-   https://huggingface.co/rhasspy/piper-voices — chaque voix possède sa propre licence (voir son MODEL_CARD).
+5. Modèles de voix Piper (téléchargés à la demande, ou déposés dans voix/modeles/)
+   https://huggingface.co/rhasspy/piper-voices
+   - fr_FR-siwis-medium, fr_FR-siwis-low : jeu de données SIWIS, Université d’Édimbourg
+     (https://datashare.is.ed.ac.uk/handle/10283/2353) — licence CC BY 4.0
+   - fr_FR-upmc-medium (voix Pierre et Jessica) : jeu de données UPMC Pierre
+     (https://github.com/marytts/upmc-pierre-data) — licence CC BY-SA 4.0
+   (La voix fr_FR-tom-medium, sous licence AGPL-3.0, n’est volontairement pas proposée.)
