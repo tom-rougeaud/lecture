@@ -246,7 +246,9 @@ h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;color:va
 .prompter-canvas{position:relative;display:block;max-width:var(--col);margin:0 auto;padding:0 clamp(18px,4vw,44px);font-family:var(--font);font-size:var(--fs);line-height:var(--lh);word-spacing:var(--ws);letter-spacing:var(--ls);color:var(--read-ink,var(--ink));text-align:left;overflow-wrap:break-word;hyphens:manual;font-kerning:normal;font-synthesis:none;font-weight:400;font-style:normal;tab-size:4}
 .prompter-canvas *{all:unset}
 .prompter-canvas :is(p,div,h1,h2,h3,h4,h5,h6,blockquote,ul,ol,pre,figure,figcaption,dl,dt,dd,hr){display:block}
-.prompter-canvas > :first-child{margin-top:0}
+.prompter-canvas > :first-child,.prompter-canvas > .sec:first-child > :first-child{margin-top:0}
+.prompter-canvas .sec{display:block;content-visibility:auto;contain-intrinsic-size:auto 800px}
+.page{will-change:auto}
 .prompter-canvas p{margin:0 0 .8em}
 .prompter-canvas :is(h1,h2,h3,h4,h5,h6){font-weight:700;line-height:1.25;margin:1.1em 0 .45em}
 .prompter-canvas h1{font-size:1.6em}.prompter-canvas h2{font-size:1.35em}.prompter-canvas h3{font-size:1.18em}.prompter-canvas h4{font-size:1.06em}.prompter-canvas :is(h5,h6){font-size:1em}
@@ -284,17 +286,34 @@ h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;color:va
 .mask-veil.bottom{top:calc(var(--band-top) + var(--band-h));bottom:0;-webkit-mask-image:linear-gradient(to top,#000 calc(100% - 22px),rgba(0,0,0,.35));mask-image:linear-gradient(to top,#000 calc(100% - 22px),rgba(0,0,0,.35))}
 .mask-band{position:fixed;left:0;right:0;z-index:8;pointer-events:none;top:var(--band-top);height:var(--band-h);box-shadow:0 -1px 0 var(--line-2),0 1px 0 var(--line-2);transition:top .2s var(--ease),height .2s var(--ease)}
 .read-marks{position:fixed;left:0;right:0;z-index:7;pointer-events:none;top:var(--band-mid);height:0}
-.read-marks span{position:absolute;top:-7px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;opacity:.75}
-.read-marks span:first-child{left:max(6px,calc(50% - var(--col) / 2 - 26px));border-left:10px solid var(--accent)}
-.read-marks span:last-child{right:max(6px,calc(50% - var(--col) / 2 - 26px));border-right:10px solid var(--accent)}
+.read-marks span{position:absolute;top:-9px;width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;opacity:.85}
+.read-marks span:first-child{left:max(4px,env(safe-area-inset-left));border-left:12px solid var(--accent)}
+.read-marks span:last-child{right:max(4px,env(safe-area-inset-right));border-right:12px solid var(--accent)}
 .hot{position:fixed;left:0;right:0;z-index:29}
 .hot.top{top:0;height:56px}.hot.bottom{bottom:0;height:84px}
 
+/* ----- Réglages ouverts : la zone de lecture reste visible à côté ----- */
+body.settings-open #viewReader .viewport{right:min(420px,100vw)}
+body.settings-open .dock{left:calc((100% - min(420px,100vw)) / 2);width:min(1060px,calc(100% - min(420px,100vw) - 24px))}
+body.settings-open .appbar{right:0}
+@media (min-width:901px){
+  body.settings-open .dock{grid-template-columns:1fr auto;grid-template-areas:"speed speed" "ctrl tools";padding:8px 12px;gap:4px 10px}
+  body.settings-open .dock-speed{grid-area:speed}
+  body.settings-open .dock-ctrl{grid-area:ctrl}
+  body.settings-open .dock-tools{grid-area:tools}
+}
+
 /* ----- Dock ----- */
-.dock{position:fixed;z-index:30;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(1060px,calc(100% - 24px));display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px 18px;padding:10px 14px;border-radius:20px;background:var(--bar-bg);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--line);box-shadow:var(--shadow);transition:transform .4s var(--ease),opacity .3s}
+.dock{position:fixed;z-index:30;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(1160px,calc(100% - 24px));display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px 18px;padding:10px 14px;border-radius:20px;background:var(--bar-bg);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--line);box-shadow:var(--shadow);transition:transform .4s var(--ease),opacity .3s}
 body:not([data-view="reader"]) .dock{display:none}
 .dock.is-hidden{transform:translate(-50%,130%);opacity:0;pointer-events:none}
 .dock-ctrl,.dock-tools{display:flex;align-items:center;gap:4px}
+.dock-tools{position:relative}
+#btnSize{display:none}
+.dock-size{display:flex;align-items:center;gap:6px;width:150px;padding:0 6px}
+.dock-size input{flex:1 1 auto;min-width:0}
+.dock-size .a-small{font-size:.8rem;font-weight:700;color:var(--ink-2)}
+.dock-size .a-big{font-size:1.25rem;font-weight:700;color:var(--ink-2)}
 .dock .btn.icon{border-color:transparent;background:transparent}
 .dock .btn.icon:hover{background:var(--accent-soft)}
 .dock .btn.icon[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent-text)}
@@ -343,7 +362,7 @@ dialog{color:var(--ink);background:var(--surface);border:1px solid var(--line);b
 dialog::backdrop{background:rgba(20,16,12,.3)}
 dialog.modal{width:min(680px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100dvh - 32px);border-radius:var(--r-lg)}
 dialog.modal[open]{display:flex;flex-direction:column;animation:pop .22s var(--ease)}
-dialog.drawer{margin:0 0 0 auto;height:100dvh;max-height:100dvh;max-width:100vw;width:min(420px,100vw);border-radius:var(--r-lg) 0 0 var(--r-lg);border-right:0}
+dialog.drawer{position:fixed;z-index:40;inset:var(--bar-h) 0 0 auto;margin:0;height:calc(100dvh - var(--bar-h));max-height:none;max-width:100vw;width:min(420px,100vw);box-shadow:-12px 0 40px rgba(0,0,0,.12);border-radius:var(--r-lg) 0 0 var(--r-lg);border-right:0}
 dialog.drawer[open]{display:flex;flex-direction:column;animation:slide .25s var(--ease)}
 dialog.drawer::backdrop{background:rgba(20,16,12,.12)}
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
@@ -408,12 +427,25 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
 .toc-list .lv2 button{padding-left:26px}
 .toc-list .lv3 button{padding-left:40px;font-size:.92rem;color:var(--ink-2)}
 
+/* ----- Fenêtre titre / auteur ----- */
+dialog.modal.small{width:min(480px,calc(100vw - 24px))}
+.btn-row.end{justify-content:flex-end;margin-top:6px}
+.err{color:#86281d;margin:-6px 0 10px;font-weight:600}
+:root[data-theme="dark"] .err,:root[data-theme="black"] .err,:root[data-theme="hc"] .err{color:#f6b8b0}
+.doc-author{margin:-4px 0 0;font-size:.88rem;color:var(--ink-2);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 /* ----- Adaptatif ----- */
 @media (max-width:1100px){
   .bar-actions .btn .lbl{display:none}
   .bar-actions .btn{padding:0;width:44px}
   .bar-actions .btn.primary .lbl{display:inline}
   .bar-actions .btn.primary{padding:0 14px;width:auto}
+}
+@media (max-width:1100px){
+  #btnSize{display:inline-flex}
+  .dock-tools{position:static}
+  .dock-size{display:none;position:absolute;right:8px;bottom:calc(100% + 10px);width:min(300px,calc(100vw - 24px));height:56px;padding:0 16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+  .dock-size.open{display:flex}
 }
 @media (max-width:900px){
   .dock{grid-template-columns:1fr auto;grid-template-areas:"speed speed" "ctrl tools";padding:8px 10px;gap:4px 8px}
@@ -446,10 +478,12 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
   .dock-speed output{min-width:4.6em}
   .dock-speed .lvl{display:none}
   .tick{font-size:.6rem;padding:0 1px}
+  body.settings-open #viewReader .viewport{right:0;bottom:56dvh}
+  body.settings-open .dock{display:none}
   .row{grid-template-columns:1fr 3.8em}
   .row label{grid-column:1 / -1}
   .row.wide{grid-template-columns:1fr}
-  dialog.drawer{width:100vw;max-width:100vw;height:88dvh;margin:auto 0 0 0;inset:auto 0 0 0;border-radius:var(--r-lg) var(--r-lg) 0 0;border-right:1px solid var(--line)}
+  dialog.drawer{width:100vw;max-width:100vw;height:56dvh;margin:0;inset:auto 0 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.15);border-radius:var(--r-lg) var(--r-lg) 0 0;border-right:1px solid var(--line)}
   @keyframes slide{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
   .lvl-row{grid-template-columns:1fr auto;gap:4px 10px}
   .lvl-row .role{grid-column:1 / -1}
@@ -501,6 +535,7 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
   <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5 8 12l7 7"/></symbol>
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.3-4.3"/></symbol>
+  <symbol id="i-size" viewBox="0 0 24 24"><path d="M2.5 19 6.5 9l4 10M3.8 15.8h5.4"/><path d="M11.5 19 16.5 5l5 14M13.2 14.6h6.6"/></symbol>
   <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5 13.8 9l5.7 1.8-5.7 1.9L12 18.5l-1.8-5.8L4.5 10.8 10.2 9z"/></symbol>
 </svg>
 
@@ -604,7 +639,6 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
       </div>
       <div class="panel">
         <h2><svg class="ic" aria-hidden="true"><use href="#i-paste"/></svg>Coller un texte</h2>
-        <label class="field"><span>Titre <span class="muted">(facultatif)</span></span><input type="text" id="pasteTitle" maxlength="160" placeholder="Ex. : Le Petit Prince — chapitre 1"></label>
         <div class="paste-box" id="pasteBox" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Zone de collage du texte" data-placeholder="Collez votre texte ici : Ctrl + V (Cmd + V sur Mac), ou appui long puis « Coller » sur mobile."></div>
         <label class="check"><input type="checkbox" id="keepLayout" checked>Conserver la mise en page d’origine (sauts de ligne, tabulations, tailles, gras, alignements)</label>
         <div class="btn-row">
@@ -652,8 +686,13 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
     <output id="speedOut" for="speed"><b id="mpmOut">120</b> <span class="unit">MPM</span><span class="lvl" id="lvlOut"></span></output>
   </div>
   <div class="dock-tools">
-    <button class="btn icon" id="btnSmaller" type="button" title="Réduire le texte (Maj + −)"><svg class="ic" aria-hidden="true"><use href="#i-aminus"/></svg><span class="sr-only">Réduire la taille du texte</span></button>
-    <button class="btn icon" id="btnBigger" type="button" title="Agrandir le texte (Maj + +)"><svg class="ic" aria-hidden="true"><use href="#i-aplus"/></svg><span class="sr-only">Agrandir la taille du texte</span></button>
+    <button class="btn icon" id="btnSize" type="button" aria-expanded="false" aria-controls="sizePop" title="Taille du texte"><svg class="ic" aria-hidden="true"><use href="#i-size"/></svg><span class="sr-only">Taille du texte</span></button>
+    <div class="dock-size" id="sizePop">
+      <span class="a-small" aria-hidden="true">A</span>
+      <label for="sizeRange" class="sr-only">Taille du texte</label>
+      <input type="range" id="sizeRange" min="0.9" max="3.5" step="0.05" value="1.6">
+      <span class="a-big" aria-hidden="true">A</span>
+    </div>
     <button class="btn icon" id="btnVoice" type="button" aria-pressed="false" title="Voix off et surlignage (V)"><svg class="ic" aria-hidden="true"><use href="#i-voice"/></svg><span class="sr-only">Voix off avec surlignage</span></button>
     <button class="btn icon" id="btnMask" type="button" aria-pressed="false" title="Masque de lecture (M)"><svg class="ic" aria-hidden="true"><use href="#i-mask"/></svg><span class="sr-only">Masque de lecture guidée</span></button>
     <button class="btn icon" id="btnFull" type="button" title="Plein écran (F)"><svg class="ic" aria-hidden="true"><use href="#i-full"/></svg><span class="sr-only">Plein écran</span></button>
@@ -707,6 +746,8 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
       <h3>Défilement</h3>
       <div class="row"><label for="setImgTime">Temps de passage d’une image</label><input type="range" id="setImgTime" min="0.5" max="6" step="0.5"><output id="outImgTime"></output></div>
       <div class="row"><label for="setCountdown">Décompte avant de démarrer</label><input type="range" id="setCountdown" min="0" max="5" step="1"><output id="outCountdown"></output></div>
+      <label class="check"><input type="checkbox" id="setPauses">Rythme naturel : courtes respirations aux points, aux virgules et entre les paragraphes (la vitesse moyenne reste celle choisie)</label>
+      <label class="check"><input type="checkbox" id="setMarks">Repères de la ligne de lecture aux bords de l’écran</label>
     </section>
     <section class="set">
       <h3>Voix off</h3>
@@ -766,7 +807,7 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
     <p><strong>Lecture+</strong> fait défiler un texte à une vitesse réglée en mots par minute, ou le lit à voix haute en surlignant chaque mot. L’affichage s’adapte à chaque lecteur : polices scolaires et DYS, espacements, masque de lecture, thèmes et contraste.</p>
     <h3>Pendant la lecture</h3>
     <ul>
-      <li>Les menus du haut et du bas s’effacent pour laisser toute la place au texte.</li>
+      <li>Les menus du haut et du bas s’effacent pour laisser toute la place au texte. Les <strong>Réglages</strong> s’ouvrent sans arrêter la lecture : chaque changement s’applique aussitôt.</li>
       <li>Pour les faire revenir : <strong>cliquez ou touchez le texte</strong>, ou approchez la souris du haut ou du bas de l’écran.</li>
       <li>Le bouton <strong>■</strong> arrête la lecture et revient à l’accueil ; la position est mémorisée.</li>
     </ul>
@@ -777,14 +818,14 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
       <tr><td><kbd>Page ↑</kbd> <kbd>Page ↓</kbd></td><td>Niveau scolaire précédent / suivant</td></tr>
       <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Reculer / avancer de 10 secondes (aussi pour parcourir le texte à l’arrêt)</td></tr>
       <tr><td><kbd>Tab</kbd></td><td>Atteindre la zone de texte, puis les commandes</td></tr>
-      <tr><td><kbd>Maj</kbd> + <kbd>+</kbd> / <kbd>−</kbd></td><td>Agrandir / réduire le texte</td></tr>
+      <tr><td><kbd>Maj</kbd> + <kbd>+</kbd> / <kbd>−</kbd></td><td>Agrandir / réduire le texte (ou curseur « A A » du dock)</td></tr>
       <tr><td><kbd>V</kbd> · <kbd>M</kbd> · <kbd>F</kbd></td><td>Voix off · masque · plein écran</td></tr>
       <tr><td><kbd>Échap</kbd></td><td>Arrêter et revenir à l’accueil</td></tr>
     </table>
     <h3>Sur tablette et téléphone</h3>
     <ul>
       <li>Toucher le texte : afficher ou masquer les menus.</li>
-      <li>Pincer à deux doigts : changer la taille du texte.</li>
+      <li>Pincer à deux doigts, ou bouton <strong>Aa</strong> : changer la taille du texte.</li>
       <li>Toucher le haut ou le bas de l’écran : faire revenir les menus.</li>
     </ul>
     <h3>Hors connexion</h3>
@@ -824,6 +865,22 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
   </div>
 </dialog>
 
+<!-- ===== Titre et auteur ===== -->
+<dialog class="modal small" id="dlgMeta" aria-labelledby="hMeta">
+  <div class="sheet-head"><h2 id="hMeta">Ajouter à la bibliothèque</h2><button class="btn icon ghost" type="button" data-close title="Fermer"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg><span class="sr-only">Fermer</span></button></div>
+  <div class="sheet-body">
+    <p class="muted small" id="metaInfo"></p>
+    <label class="field"><span>Titre</span><input type="text" id="metaTitle" maxlength="160" required aria-describedby="metaErr" autocomplete="off"></label>
+    <p class="err small" id="metaErr" role="alert" hidden>Indiquez un titre.</p>
+    <label class="field"><span>Auteur <span class="muted">(facultatif)</span></span><input type="text" id="metaAuthor" maxlength="120" list="authorList" autocomplete="off" placeholder="Ex. : Jean de La Fontaine"></label>
+    <datalist id="authorList"></datalist>
+    <div class="btn-row end">
+      <button class="btn ghost" type="button" id="btnMetaCancel">Annuler</button>
+      <button class="btn primary" type="button" id="btnMetaOk">Ajouter et lire</button>
+    </div>
+  </div>
+</dialog>
+
 <!-- ===== Voix naturelle : consentement au téléchargement ===== -->
 <dialog class="modal" id="dlgVoice" aria-labelledby="hVoice">
   <div class="sheet-head"><h2 id="hVoice">Voix naturelle Lecture+</h2><button class="btn icon ghost" type="button" data-close title="Fermer"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg><span class="sr-only">Fermer</span></button></div>
@@ -843,7 +900,7 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
 </dialog>
 
 <script type="application/json" id="lp-data">
-{"fluence":[{"niveau":"CP","nom":"CP (fin d’année)","cible":50,"role":"Déchiffrage et automatisation des correspondances graphèmes-phonèmes","source":"seuil de fin d’année"},{"niveau":"CE1","nom":"CE1","cible":70,"role":"Restitution rapide, accès au sens","source":"seuil de fin d’année"},{"niveau":"CE2","nom":"CE2","cible":90,"role":"Fluence continue, expressivité et prosodie","source":"seuil de fin d’année"},{"niveau":"CM1","nom":"CM1","cible":110,"role":"Lecture courante, autonomie de compréhension","source":"seuil de fin d’année"},{"niveau":"CM2","nom":"CM2","cible":120,"role":"Consolidation avant le collège","source":"seuil de fin d’année"},{"niveau":"6e","nom":"6e – 5e","cible":130,"role":"Lecture fluide des textes disciplinaires","source":"valeur intermédiaire estimée (pas de repère officiel chiffré)"},{"niveau":"4e","nom":"4e – 3e","cible":140,"role":"Lecture autonome et efficace","source":"seuil « satisfaisant » de l’évaluation nationale de 4e (Éduscol)"},{"niveau":"Lycée","nom":"Lycée / adulte","cible":200,"role":"Lecture experte, balayage d’information","source":"ordre de grandeur du lecteur expert"}],"fluenceNote":"Repères en mots correctement lus par minute. École : seuils de fin d’année couramment utilisés dans les circonscriptions (CP 50 → CM2 120). 4e : seuil « satisfaisant » de l’évaluation nationale de 4e publiée sur Éduscol (120 à 139 = fragile, 140 et plus = satisfaisant). 6e – 5e : valeur intermédiaire estimée, faute de repère officiel chiffré. Ces valeurs servent à fixer un objectif d’entraînement, pas à évaluer un élève.","demo":{"titre":"Le Lièvre et la Tortue (texte d’essai)","html":"<h1>Bienvenue dans Lecture+<\/h1><p>Voici une fable pour essayer. Appuyez sur le bouton de lecture : le texte défile à la vitesse choisie. Le curseur du bas règle cette vitesse par paliers, du CP au lycée.<\/p><p>Le bouton <strong>haut-parleur<\/strong> active la voix off : chaque mot est surligné pendant la lecture. Le bouton <strong>masque<\/strong> floute tout sauf les lignes en cours.<\/p><h2>Le Lièvre et la Tortue<\/h2><p><em>Jean de La Fontaine, Fables, livre VI, 1668<\/em><\/p><p>Rien ne sert de courir ; il faut partir à point.<br>Le Lièvre et la Tortue en sont un témoignage.<br>« Gageons, dit celle-ci, que vous n’atteindrez point<br>Sitôt que moi ce but. — Sitôt ? Êtes-vous sage ?<br>Repartit l’animal léger.<br>Ma commère, il vous faut purger<br>Avec quatre grains d’ellébore.<br>— Sage ou non, je parie encore. »<br>Ainsi fut fait : et de tous deux<br>On mit près du but les enjeux :<br>Savoir quoi, ce n’est pas l’affaire,<br>Ni de quel juge l’on convint.<\/p><p>Notre Lièvre n’avait que quatre pas à faire ;<br>J’entends de ceux qu’il fait lorsque prêt d’être atteint<br>Il s’éloigne des chiens, les renvoie aux calendes,<br>Et leur fait arpenter les landes.<br>Ayant, dis-je, du temps de reste pour brouter,<br>Pour dormir, et pour écouter<br>D’où vient le vent, il laisse la Tortue<br>Aller son train de sénateur.<br>Elle part, elle s’évertue ;<br>Elle se hâte avec lenteur.<\/p><p>Lui cependant méprise une telle victoire,<br>Tient la gageure à peu de gloire,<br>Croit qu’il y va de son honneur<br>De partir tard. Il broute, il se repose,<br>Il s’amuse à toute autre chose<br>Qu’à la gageure. À la fin quand il vit<br>Que l’autre touchait presque au bout de la carrière,<br>Il partit comme un trait ; mais les élans qu’il fit<br>Furent vains : la Tortue arriva la première.<br>« Eh bien ! lui cria-t-elle, avais-je pas raison ?<br>De quoi vous sert votre vitesse ?<br>Moi l’emporter ! et que serait-ce<br>Si vous portiez une maison ? »<\/p><hr><p><strong>Astuce :<\/strong> pendant la lecture, les menus s’effacent. Touchez ou cliquez le texte pour les faire revenir, ou approchez la souris du haut ou du bas de l’écran.<\/p>"}}
+{"fluence":[{"niveau":"CP","nom":"CP (fin d’année)","cible":50,"role":"Déchiffrage et automatisation des correspondances graphèmes-phonèmes","source":"seuil de fin d’année"},{"niveau":"CE1","nom":"CE1","cible":70,"role":"Restitution rapide, accès au sens","source":"seuil de fin d’année"},{"niveau":"CE2","nom":"CE2","cible":90,"role":"Fluence continue, expressivité et prosodie","source":"seuil de fin d’année"},{"niveau":"CM1","nom":"CM1","cible":110,"role":"Lecture courante, autonomie de compréhension","source":"seuil de fin d’année"},{"niveau":"CM2","nom":"CM2","cible":120,"role":"Consolidation avant le collège","source":"seuil de fin d’année"},{"niveau":"6e","nom":"6e – 5e","cible":130,"role":"Lecture fluide des textes disciplinaires","source":"valeur intermédiaire estimée (pas de repère officiel chiffré)"},{"niveau":"4e","nom":"4e – 3e","cible":140,"role":"Lecture autonome et efficace","source":"seuil « satisfaisant » de l’évaluation nationale de 4e (Éduscol)"},{"niveau":"Lycée","nom":"Lycée / adulte","cible":160,"role":"Lecture à voix haute fluide et expressive","source":"ordre de grandeur d’un bon lecteur à voix haute (la lecture silencieuse est plus rapide : 200 à 250)"}],"fluenceNote":"Repères en mots correctement lus par minute. École : seuils de fin d’année couramment utilisés dans les circonscriptions (CP 50 → CM2 120). 4e : seuil « satisfaisant » de l’évaluation nationale de 4e publiée sur Éduscol (120 à 139 = fragile, 140 et plus = satisfaisant). 6e – 5e : valeur intermédiaire estimée, faute de repère officiel chiffré. Lycée / adulte : 160, rythme confortable d’un bon lecteur à voix haute. Ces valeurs servent à fixer un objectif d’entraînement, pas à évaluer un élève.","demo":{"titre":"Le Lièvre et la Tortue (texte d’essai)","html":"<h1>Bienvenue dans Lecture+<\/h1><p>Voici une fable pour essayer. Appuyez sur le bouton de lecture : le texte défile à la vitesse choisie. Le curseur du bas règle cette vitesse par paliers, du CP au lycée.<\/p><p>Le bouton <strong>haut-parleur<\/strong> active la voix off : chaque mot est surligné pendant la lecture. Le bouton <strong>masque<\/strong> floute tout sauf les lignes en cours.<\/p><h2>Le Lièvre et la Tortue<\/h2><p><em>Jean de La Fontaine, Fables, livre VI, 1668<\/em><\/p><p>Rien ne sert de courir ; il faut partir à point.<br>Le Lièvre et la Tortue en sont un témoignage.<br>« Gageons, dit celle-ci, que vous n’atteindrez point<br>Sitôt que moi ce but. — Sitôt ? Êtes-vous sage ?<br>Repartit l’animal léger.<br>Ma commère, il vous faut purger<br>Avec quatre grains d’ellébore.<br>— Sage ou non, je parie encore. »<br>Ainsi fut fait : et de tous deux<br>On mit près du but les enjeux :<br>Savoir quoi, ce n’est pas l’affaire,<br>Ni de quel juge l’on convint.<\/p><p>Notre Lièvre n’avait que quatre pas à faire ;<br>J’entends de ceux qu’il fait lorsque prêt d’être atteint<br>Il s’éloigne des chiens, les renvoie aux calendes,<br>Et leur fait arpenter les landes.<br>Ayant, dis-je, du temps de reste pour brouter,<br>Pour dormir, et pour écouter<br>D’où vient le vent, il laisse la Tortue<br>Aller son train de sénateur.<br>Elle part, elle s’évertue ;<br>Elle se hâte avec lenteur.<\/p><p>Lui cependant méprise une telle victoire,<br>Tient la gageure à peu de gloire,<br>Croit qu’il y va de son honneur<br>De partir tard. Il broute, il se repose,<br>Il s’amuse à toute autre chose<br>Qu’à la gageure. À la fin quand il vit<br>Que l’autre touchait presque au bout de la carrière,<br>Il partit comme un trait ; mais les élans qu’il fit<br>Furent vains : la Tortue arriva la première.<br>« Eh bien ! lui cria-t-elle, avais-je pas raison ?<br>De quoi vous sert votre vitesse ?<br>Moi l’emporter ! et que serait-ce<br>Si vous portiez une maison ? »<\/p><hr><p><strong>Astuce :<\/strong> pendant la lecture, les menus s’effacent. Touchez ou cliquez le texte pour les faire revenir, ou approchez la souris du haut ou du bas de l’écran.<\/p>"}}
 </script>
 <script>/* jszip — licence : voir « À propos » */
 /*!
@@ -939,7 +996,7 @@ this.attribute(att));if(0===node.children.length||node.children.every(function(e
 (() => {
 'use strict';
 
-const APP = { name: 'Lecture+', version: '2.1.0', key: 'lectureplus.v2', idb: 'lectureplus_v2' };
+const APP = { name: 'Lecture+', version: '2.2.0', key: 'lectureplus.v2', idb: 'lectureplus_v2' };
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -1007,13 +1064,13 @@ const piperPossible = /^https?:$/.test(location.protocol) && 'Worker' in window 
 const DEFAULTS = {
   theme: 'beige', contrast: 50, font: 'lexend', size: 1.6, lh: 1.7, ws: 0.06, ls: 0, width: 64,
   mpm: 110, mode: 'scroll', mask: false, maskLines: 2, maskBlur: 6, maskDim: 0.45, readLine: 0.42,
-  imgTime: 1.5, countdown: 3, hl: 'both', engine: piperPossible ? 'piper' : 'system', piperVoice: 'siwis-medium',
+  imgTime: 1.5, countdown: 3, pauses: true, marks: true, hl: 'both', engine: piperPossible ? 'piper' : 'system', piperVoice: 'siwis-medium',
   voiceURI: '', allowOnline: false
 };
 const SCHEMA = {
   theme: THEMES, contrast: [0, 100], font: Object.keys(FONTS), size: [0.9, 3.5], lh: [1.2, 2.5], ws: [0, 1], ls: [0, 0.3],
   width: [30, 100], mpm: [20, 300], mode: ['scroll', 'voice'], mask: 'bool', maskLines: [1, 5], maskBlur: [0, 16],
-  maskDim: [0, 0.9], readLine: [0.25, 0.6], imgTime: [0.5, 6], countdown: [0, 5], hl: ['word', 'sentence', 'both', 'none'],
+  maskDim: [0, 0.9], readLine: [0.25, 0.6], imgTime: [0.5, 6], countdown: [0, 5], pauses: 'bool', marks: 'bool', hl: ['word', 'sentence', 'both', 'none'],
   engine: ['piper', 'system'], piperVoice: 'str', voiceURI: 'str', allowOnline: 'bool'
 };
 function sanitizeSettings(o) {
@@ -1136,11 +1193,11 @@ const el = {
   dock: $('#dock'), hotTop: $('#hotTop'), hotBottom: $('#hotBottom'),
   maskTop: $('#maskTop'), maskBottom: $('#maskBottom'), maskBand: $('#maskBand'), readMarks: $('#readMarks'),
   btnPlay: $('#btnPlay'), playIcon: $('#playIcon'), speed: $('#speed'), ticks: $('#ticks'), mpmOut: $('#mpmOut'), lvlOut: $('#lvlOut'),
-  btnVoice: $('#btnVoice'), btnMask: $('#btnMask'),
+  btnVoice: $('#btnVoice'), btnMask: $('#btnMask'), sizePop: $('#sizePop'), sizeRange: $('#sizeRange'), btnSize: $('#btnSize'),
   fileInput: $('#fileInput'), importInput: $('#importInput'),
   dropOverlay: $('#dropOverlay'), busy: $('#busy'), busyText: $('#busyText'), busyBarWrap: $('#busyBarWrap'), busyBar: $('#busyBar'), busyCancel: $('#busyCancel'),
   toast: $('#toast'), countdown: $('#countdown'),
-  dlgSettings: $('#dlgSettings'), dlgFluence: $('#dlgFluence'), dlgToc: $('#dlgToc'), dlgAbout: $('#dlgAbout'), dlgPrivacy: $('#dlgPrivacy'), dlgVoice: $('#dlgVoice')
+  dlgSettings: $('#dlgSettings'), dlgFluence: $('#dlgFluence'), dlgToc: $('#dlgToc'), dlgAbout: $('#dlgAbout'), dlgPrivacy: $('#dlgPrivacy'), dlgVoice: $('#dlgVoice'), dlgMeta: $('#dlgMeta')
 };
 let toastT = 0;
 function toast(msg, ms = 2800) {
@@ -1407,12 +1464,15 @@ function parseMd(buf, name) {
   requireLib(window.marked && typeof window.marked.parse === 'function', 'Markdown');
   const text = decodeText(buf);
   const m = text.match(/^\s*#\s+(.+)$/m);
-  return { title: m ? m[1].trim() : baseName(name), frag: sanitize(window.marked.parse(text, { gfm: true, breaks: false, async: false })) };
+  const fm = text.match(/^---\s*\n([\s\S]*?)\n---/);
+  const au = fm && fm[1].match(/^(?:author|auteur)\s*:\s*["']?(.+?)["']?\s*$/mi);
+  return { title: m ? m[1].trim() : baseName(name), author: au ? au[1].trim() : '', frag: sanitize(window.marked.parse(text.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, ''), { gfm: true, breaks: false, async: false })) };
 }
 function parseHtml(buf, name) {
   const d = new DOMParser().parseFromString(decodeText(buf), 'text/html');
   const t = d.querySelector('title');
-  return { title: (t && t.textContent.trim()) || baseName(name), frag: sanitize(d.body || d.documentElement, { styles: true }) };
+  const au = d.querySelector('meta[name="author" i]');
+  return { title: (t && t.textContent.trim()) || baseName(name), author: au ? (au.getAttribute('content') || '').trim() : '', frag: sanitize(d.body || d.documentElement, { styles: true }) };
 }
 async function parseDocx(buf, name) {
   requireLib(window.mammoth && typeof window.mammoth.convertToHtml === 'function', 'Word');
@@ -1420,7 +1480,17 @@ async function parseDocx(buf, name) {
   const res = await window.mammoth.convertToHtml({ arrayBuffer: buf }, { convertImage: toDataUri });
   const frag = sanitize(res.value || '');
   const h = frag.querySelector && frag.querySelector('h1');
-  return { title: (h && h.textContent.trim()) || baseName(name), frag };
+  let title = '', author = '';
+  try {
+    const zip = await window.JSZip.loadAsync(buf);
+    const core = zip.file('docProps/core.xml');
+    if (core) {
+      const x = parseXml(await core.async('string'), 'application/xml');
+      const g = tag => { const n = x && (x.getElementsByTagName(tag)[0]); return n ? n.textContent.trim() : ''; };
+      title = g('dc:title'); author = g('dc:creator');
+    }
+  } catch (e) { /* propriétés absentes */ }
+  return { title: title || (h && h.textContent.trim()) || baseName(name), author, frag };
 }
 /* ----- EPUB ----- */
 function joinPath(base, rel) {
@@ -1461,6 +1531,8 @@ async function parseEpub(buf, name, progress) {
   }
   const titleEl = opf.getElementsByTagName('dc:title')[0] || opf.getElementsByTagNameNS('*', 'title')[0];
   const title = (titleEl && titleEl.textContent.trim()) || baseName(name);
+  const auEl = opf.getElementsByTagName('dc:creator')[0] || opf.getElementsByTagNameNS('*', 'creator')[0];
+  const author = auEl ? auEl.textContent.trim() : '';
   const spine = Array.from(opf.getElementsByTagName('itemref')).map(r => manifest[r.getAttribute('idref')]).filter(Boolean);
   const imgCache = new Map();
   const loadImg = async p => {
@@ -1501,7 +1573,7 @@ async function parseEpub(buf, name, progress) {
     out.appendChild(frag);
     if (i % 5 === 0) await nextFrame();
   }
-  return { title, frag: out };
+  return { title, author, frag: out };
 }
 /* ----- PDF ----- */
 let pdfWorkerUrl = null;
@@ -1603,8 +1675,12 @@ async function parsePdf(buf, name, progress) {
   requireLib(setupPdf(), 'PDF');
   const lib0 = window.pdfjsLib;
   const pdf = await lib0.getDocument({ data: new Uint8Array(buf), isEvalSupported: false, disableFontFace: true, useSystemFonts: false }).promise;
-  let title = baseName(name);
-  try { const meta = await pdf.getMetadata(); if (meta && meta.info && meta.info.Title && String(meta.info.Title).trim().length > 2) title = String(meta.info.Title).trim(); } catch (e) { /* sans titre */ }
+  let title = baseName(name), author = '';
+  try {
+    const meta = await pdf.getMetadata();
+    if (meta && meta.info && meta.info.Title && String(meta.info.Title).trim().length > 2) title = String(meta.info.Title).trim();
+    if (meta && meta.info && meta.info.Author) author = String(meta.info.Author).trim();
+  } catch (e) { /* sans titre */ }
   const pages = [];
   const budget = { left: 250 };
   for (let p = 1; p <= pdf.numPages; p++) {
@@ -1649,134 +1725,243 @@ async function parsePdf(buf, name, progress) {
     for (const u of pg.images) html += `<p><img src="${u}" alt="Illustration page ${idx + 1}"></p>`;
   });
   try { pdf.destroy(); } catch (e) { /* ignoré */ }
-  return { title, frag: sanitize(html) };
+  return { title, author, frag: sanitize(html) };
 }
 
 /* ------------------------------------------------------------------------
-   6. Lecteur : découpage en mots, phrases, mise en page
+   6. Lecteur : découpage en mots (paresseux), sections virtualisées
+   ------------------------------------------------------------------------
+   Pour rester fluide avec de très gros livres :
+   - le texte est réparti en sections (.sec) que le navigateur ne met en page
+     que lorsqu’elles approchent de l’écran (content-visibility: auto) ;
+   - les mots ne deviennent des éléments <span> qu’au moment où leur section
+     approche de l’écran ; leur texte, lui, est connu dès l’ouverture
+     (comptage, phrases, voix off, progression).
    ------------------------------------------------------------------------ */
 const WS_CHARS = ' \t\n\r\f\v' + String.fromCharCode(0x1680, 0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008, 0x2009, 0x200A, 0x2028, 0x2029, 0x205F, 0x3000);
 const SPLIT = new RegExp('([' + WS_CHARS.replace(/[\\\]^-]/g, '\\$&') + ']+)');
 const HAS_WORD = /[\p{L}\p{N}]/u;
-const BLOCK_SEL = 'p,li,h1,h2,h3,h4,h5,h6,blockquote,td,th,dt,dd,figcaption,pre,caption,div,figure';
+const BLOCK_SEL = 'p,li,h1,h2,h3,h4,h5,h6,blockquote,td,th,dt,dd,figcaption,pre,caption,figure';
 const SENT_END = new RegExp('[.!?…]+["»”’)\\]' + NBSP + NNBSP + ']*$');
 const CLAUSE_END = new RegExp('[,;:—–]["»”’)\\]' + NBSP + NNBSP + ']*$');
+const SEC_CHARS = 2500, SEC_NODES = 30;
 
 const R = {
-  doc: null, meta: null, isDemo: false,
-  tokens: [], isWord: null, wordPrefix: null, blockOf: null, sentenceOf: null, sentences: [], totalWords: 0,
-  tops: null, zones: [], ppw: 10, fontPx: 25, lineH: 40, readY: 300
+  meta: null, isDemo: false,
+  text: [], tokens: [], isWord: null, wordPrefix: null, blockOf: null, sentenceOf: null, sentences: [], totalWords: 0,
+  units: null, unitScale: 1, secs: [], secStart: null, io: null,
+  ppw: 10, fontPx: 25, lineH: 40, readY: 300
 };
 
-function tokenize(rootEl) {
-  const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode);
-  const tokens = [], isW = [], blk = [];
+/** Regroupe le contenu en sections ; descend dans les gros conteneurs (chapitres EPUB…). */
+function sectionize(container) {
+  const kids = Array.from(container.childNodes);
+  let cur = null, len = 0, n = 0;
+  for (const k of kids) {
+    const tl = (k.textContent || '').length;
+    if (k.nodeType === 1 && k.localName === 'div' && !k.classList.contains('tw') && tl > SEC_CHARS * 4 && k.children.length > 3) {
+      cur = null; sectionize(k); continue;
+    }
+    if (!cur) { cur = document.createElement('div'); cur.className = 'sec'; container.insertBefore(cur, k); len = 0; n = 0; }
+    cur.appendChild(k);
+    len += tl; n++;
+    if (len > SEC_CHARS || n >= SEC_NODES || (k.nodeType === 1 && (k.localName === 'img' || k.querySelector('img')))) cur = null;
+  }
+}
+function textNodesOf(sec) {
+  const w = document.createTreeWalker(sec, NodeFilter.SHOW_TEXT);
+  const out = [];
+  while (w.nextNode()) { const v = w.currentNode.nodeValue; if (v && v.trim()) out.push(w.currentNode); }
+  return out;
+}
+/** Analyse du texte sans créer d’éléments : mots, blocs, phrases, poids de lecture. */
+function prepareTokens() {
+  const text = [], isW = [], blk = [];
   const blockIds = new Map();
   let bc = 0;
-  for (const node of nodes) {
-    const text = node.nodeValue;
-    if (!text || !text.trim()) continue;
-    const parent = node.parentElement;
-    const b = (parent && parent.closest(BLOCK_SEL)) || rootEl;
-    let bid = blockIds.get(b);
-    if (bid === undefined) { bid = bc++; blockIds.set(b, bid); }
-    const parts = text.split(SPLIT);
-    const frag = document.createDocumentFragment();
-    for (let i = 0; i < parts.length; i++) {
-      const p = parts[i];
-      if (!p) continue;
-      if (i % 2 === 1) { frag.appendChild(document.createTextNode(p)); continue; }
-      const sp = document.createElement('span');
-      sp.className = 't';
-      sp.textContent = p;
-      frag.appendChild(sp);
-      tokens.push(sp); isW.push(HAS_WORD.test(p) ? 1 : 0); blk.push(bid);
+  const secs = $$('.sec', el.canvas).map((s, i) => {
+    s.dataset.i = i;
+    const a = text.length;
+    for (const node of textNodesOf(s)) {
+      const b = (node.parentElement && node.parentElement.closest(BLOCK_SEL)) || node.parentElement || s;
+      let bid = blockIds.get(b);
+      if (bid === undefined) { bid = bc++; blockIds.set(b, bid); }
+      const parts = node.nodeValue.split(SPLIT);
+      for (let j = 0; j < parts.length; j += 2) { const p = parts[j]; if (!p) continue; text.push(p); isW.push(HAS_WORD.test(p) ? 1 : 0); blk.push(bid); }
     }
-    node.parentNode.replaceChild(frag, node);
-  }
-  const N = tokens.length;
-  const isWord = Uint8Array.from(isW);
-  const blockOf = Int32Array.from(blk);
-  const wordPrefix = new Int32Array(N + 1);
-  for (let i = 0; i < N; i++) wordPrefix[i + 1] = wordPrefix[i] + isWord[i];
-  return { tokens, isWord, blockOf, wordPrefix, totalWords: wordPrefix[N] };
+    return { el: s, a, b: text.length - 1, done: false, chars: (s.textContent || '').length, imgs: s.querySelectorAll('img').length };
+  });
+  const N = text.length;
+  R.text = text; R.tokens = new Array(N); R.secs = secs;
+  R.secStart = Int32Array.from(secs.map(s => s.a));
+  R.isWord = Uint8Array.from(isW);
+  R.blockOf = Int32Array.from(blk);
+  R.wordPrefix = new Int32Array(N + 1);
+  for (let i = 0; i < N; i++) R.wordPrefix[i + 1] = R.wordPrefix[i] + R.isWord[i];
+  R.totalWords = R.wordPrefix[N];
+  buildSentences();
+  computeUnits();
 }
-function buildSentences(tokens, blockOf) {
-  const N = tokens.length;
+function buildSentences() {
+  const N = R.text.length;
   const sentences = [];
   const sentenceOf = new Int32Array(N);
   let start = 0, count = 0;
   for (let i = 0; i < N; i++) {
     count++;
-    const t = tokens[i].textContent;
+    const t = R.text[i];
     const last = i === N - 1;
-    const blockEnd = !last && blockOf[i + 1] !== blockOf[i];
-    const end = SENT_END.test(t) || (count >= 24 && CLAUSE_END.test(t)) || count >= 48;
-    if (last || blockEnd || end) {
+    const blockEnd = !last && R.blockOf[i + 1] !== R.blockOf[i];
+    if (last || blockEnd || SENT_END.test(t) || (count >= 24 && CLAUSE_END.test(t)) || count >= 48) {
       const si = sentences.length;
       sentences.push([start, i]);
       for (let k = start; k <= i; k++) sentenceOf[k] = si;
       start = i + 1; count = 0;
     }
   }
-  return { sentences, sentenceOf };
+  R.sentences = sentences; R.sentenceOf = sentenceOf;
+}
+/** Poids de lecture : 1 par mot, plus de courtes respirations à la ponctuation (rythme naturel).
+    La moyenne reste exactement égale à la vitesse choisie en MPM. */
+function computeUnits() {
+  const N = R.text.length;
+  const u = new Float32Array(N);
+  let total = 0;
+  for (let i = 0; i < N; i++) {
+    let w = R.isWord[i];
+    if (S.pauses) {
+      const t = R.text[i];
+      if (SENT_END.test(t)) w += 0.7; else if (CLAUSE_END.test(t)) w += 0.3;
+      if (i < N - 1 && R.blockOf[i + 1] !== R.blockOf[i]) w += 0.5;
+    }
+    u[i] = w; total += w;
+  }
+  R.units = u;
+  R.unitScale = total > 0 ? R.totalWords / total : 1;
+}
+function secOf(i) {
+  const a = R.secStart;
+  let lo = 0, hi = a.length - 1;
+  while (lo < hi) { const m = (lo + hi + 1) >> 1; if (a[m] <= i) lo = m; else hi = m - 1; }
+  return lo;
+}
+/** Transforme les mots d’une section en <span class="t"> (une seule fois). */
+function ensureTokens(si) {
+  const s = R.secs[si];
+  if (!s || s.done) return;
+  s.done = true;
+  let k = s.a;
+  for (const node of textNodesOf(s.el)) {
+    const parts = node.nodeValue.split(SPLIT);
+    const frag = document.createDocumentFragment();
+    for (let j = 0; j < parts.length; j++) {
+      const p = parts[j];
+      if (!p) continue;
+      if (j % 2 === 1) { frag.appendChild(document.createTextNode(p)); continue; }
+      const sp = document.createElement('span');
+      sp.className = 't';
+      sp.textContent = p;
+      frag.appendChild(sp);
+      R.tokens[k++] = sp;
+    }
+    node.parentNode.replaceChild(frag, node);
+  }
+  if (R.io) R.io.unobserve(s.el);
+}
+function tok(i) {
+  if (i < 0 || i >= R.text.length) return null;
+  if (!R.tokens[i]) ensureTokens(secOf(i));
+  return R.tokens[i] || null;
+}
+function tokenIndexOfSpan(span) {
+  const sec = span.closest('.sec');
+  if (!sec) return -1;
+  const s = R.secs[+sec.dataset.i];
+  ensureTokens(+sec.dataset.i);
+  for (let i = s.a; i <= s.b; i++) if (R.tokens[i] === span) return i;
+  return -1;
+}
+function estimateSections() {
+  const colPx = Math.max(200, el.canvas.clientWidth - 2 * Math.min(44, window.innerWidth * 0.04));
+  const cpl = Math.max(10, colPx / (R.fontPx * 0.5 + R.fontPx * S.ls));
+  for (const s of R.secs) {
+    const h = Math.round((s.chars / cpl + 2) * R.lineH + s.imgs * Math.min(window.innerHeight * 0.62, 420));
+    s.el.style.containIntrinsicSize = `auto ${h}px`;
+  }
 }
 
 function renderDocument(meta, frag, opts = {}) {
   stopPlayback(true);
-  clearHighlights();
+  if (R.io) R.io.disconnect();
   el.canvas.replaceChildren(frag);
+  sectionize(el.canvas);
   R.meta = meta; R.isDemo = !!meta.demo;
-  el.docTitle.textContent = meta.name;
+  el.docTitle.textContent = meta.author ? `${meta.name} — ${meta.author}` : meta.name;
   document.title = meta.name + ' — Lecture+';
-  Object.assign(R, tokenize(el.canvas));
-  const sb = buildSentences(R.tokens, R.blockOf);
-  R.sentences = sb.sentences; R.sentenceOf = sb.sentenceOf;
+  prepareTokens();
   tts.cur = -1; tts.sent = -1;
+  if ('IntersectionObserver' in window) {
+    R.io = new IntersectionObserver(entries => {
+      for (const e of entries) if (e.isIntersecting) ensureTokens(+e.target.dataset.i);
+    }, { root: el.viewport, rootMargin: '150% 0px 150% 0px' });
+    R.secs.forEach(s => R.io.observe(s.el));
+  } else R.secs.forEach((s, i) => ensureTokens(i));
+  $$('img', el.canvas).forEach(img => img.addEventListener('load', () => { prompter.dirty = true; }, { once: true }));
   buildToc();
   layout();
-  const start = Number.isInteger(opts.tok) ? clamp(opts.tok, 0, Math.max(0, R.tokens.length - 1)) : 0;
+  const start = Number.isInteger(opts.tok) ? clamp(opts.tok, 0, Math.max(0, R.text.length - 1)) : 0;
   if (start > 0) scrollToToken(start, false); else { el.viewport.scrollTop = 0; syncScrollPos(); }
   requestStats();
   showChrome();
-  if (!R.tokens.length) toast('Aucun texte lisible n’a été trouvé dans ce document.', 4000);
+  if (!R.text.length) toast('Aucun texte lisible n’a été trouvé dans ce document.', 4000);
 }
 
+/* ----- positions ----- */
+const vpRect = () => el.viewport.getBoundingClientRect();
+/** Mot situé sur la ligne de lecture (recherche dichotomique sur les sections puis sur les mots). */
 function readingToken() {
-  const { tops, tokens, readY, fontPx } = R;
-  const N = tokens.length;
-  if (!N || !tops) return 0;
-  const y = el.viewport.scrollTop + readY - fontPx * 0.6 + 2;
-  if (tops[0] > y) return 0;
-  let lo = 0, hi = N - 1;
-  while (lo < hi) { const m = (lo + hi + 1) >> 1; if (tops[m] <= y) lo = m; else hi = m - 1; }
-  let i = lo;
-  const lineTop = tops[i];
-  while (i > 0 && Math.abs(tops[i - 1] - lineTop) < 2) i--;
-  return i;
+  const secs = R.secs;
+  if (!secs.length || !R.text.length) return 0;
+  const target = vpRect().top + R.readY;
+  let lo = 0, hi = secs.length - 1;
+  while (lo < hi) { const m = (lo + hi + 1) >> 1; if (secs[m].el.getBoundingClientRect().top <= target) lo = m; else hi = m - 1; }
+  let si = lo;
+  while (si > 0 && secs[si].b < secs[si].a) si--;
+  const s = secs[si];
+  if (s.b < s.a) return 0;
+  ensureTokens(si);
+  const y = target - R.fontPx * 0.6 + 2;
+  let a = s.a, b = s.b;
+  if (R.tokens[a].getBoundingClientRect().top > y) return a;
+  while (a < b) { const m = (a + b + 1) >> 1; if (R.tokens[m].getBoundingClientRect().top <= y) a = m; else b = m - 1; }
+  const lineTop = R.tokens[a].getBoundingClientRect().top;
+  while (a > s.a && Math.abs(R.tokens[a - 1].getBoundingClientRect().top - lineTop) < 2) a--;
+  return a;
 }
 function anchorToken() {
-  if (!R.tokens.length) return -1;
+  if (!R.text.length) return -1;
   if (S.mode === 'voice' && tts.cur >= 0) return tts.cur;
   return readingToken();
 }
 function liveTop(i) {
-  const t = R.tokens[i];
+  const t = tok(i);
   if (!t) return 0;
-  return t.getBoundingClientRect().top - el.viewport.getBoundingClientRect().top + el.viewport.scrollTop;
+  return t.getBoundingClientRect().top - vpRect().top + el.viewport.scrollTop;
 }
 function scrollToToken(i, smooth) {
-  if (!R.tokens[i]) return;
+  if (!tok(i)) return;
   const y = liveTop(i) + R.fontPx * 0.6 - R.readY;
-  if (smooth) smoothScrollTo(y); else { el.viewport.scrollTop = Math.max(0, y); syncScrollPos(); }
+  if (smooth) { smoothScrollTo(y); return; }
+  el.viewport.scrollTop = Math.max(0, y); syncScrollPos();
+  /* les sections qui viennent d’apparaître peuvent changer de hauteur : on recale */
+  requestAnimationFrame(() => { if (!playing || S.mode === 'voice') { el.viewport.scrollTop = Math.max(0, liveTop(i) + R.fontPx * 0.6 - R.readY); syncScrollPos(); } prompter.dirty = true; });
 }
 function computeReadY(vh) {
   const top = (el.appbar.offsetHeight || 60) + R.lineH;
   const bottom = vh - (el.dock.offsetHeight || 90) - R.lineH * 1.2;
   return Math.round(clamp(vh * S.readLine, Math.min(top, vh * 0.3), Math.max(bottom, vh * 0.35)));
 }
+let lastTypoKey = '';
 function layout() {
   const vp = el.viewport;
   const vh = vp.clientHeight || window.innerHeight;
@@ -1785,33 +1970,10 @@ function layout() {
   R.readY = computeReadY(vh);
   el.page.style.paddingTop = Math.round(Math.max((el.appbar.offsetHeight || 60) + 16, R.readY - R.fontPx * 0.6)) + 'px';
   el.page.style.paddingBottom = Math.round(vh - R.readY + R.lineH * 1.5) + 'px';
-  const toks = R.tokens, N = toks.length;
-  const tops = new Float64Array(N);
-  const vpTop = vp.getBoundingClientRect().top;
-  const base = el.canvas.getBoundingClientRect().top - vpTop + vp.scrollTop;
-  const canvas = el.canvas;
-  for (let i = 0; i < N; i++) {
-    const t = toks[i];
-    tops[i] = t.offsetParent === canvas ? base + t.offsetTop : t.getBoundingClientRect().top - vpTop + vp.scrollTop;
-  }
-  R.tops = tops;
-  let sum = 0, n = 0, prev = -1;
-  const cap = R.lineH * 2.5;
-  for (let i = 0; i < N; i++) {
-    if (!R.isWord[i]) continue;
-    if (prev >= 0) { sum += clamp(tops[i] - tops[prev], 0, cap); n++; }
-    prev = i;
-  }
-  if (n >= 20 && sum > 0) R.ppw = sum / n;
-  else {
-    const colPx = Math.min(el.canvas.clientWidth, R.fontPx * 0.5 * S.width);
-    R.ppw = R.lineH / Math.max(1, colPx / (R.fontPx * 3.1));
-  }
-  R.zones = $$('img', el.canvas).map(img => {
-    const r = img.getBoundingClientRect();
-    const top = r.top - vpTop + vp.scrollTop;
-    return [top - R.lineH, top + r.height + R.lineH * 0.5];
-  }).filter(z => z[1] - z[0] > R.lineH * 3);
+  const key = [S.font, S.size, S.lh, S.ws, S.ls, S.width, vp.clientWidth].join('|');
+  if (key !== lastTypoKey) { lastTypoKey = key; estimateSections(); }
+  prompter.dirty = true;
+  measurePpw();
   positionGuides();
   updateSpeedUI();
   requestStats();
@@ -1825,19 +1987,17 @@ function scheduleLayout(anchor) {
     pendingAnchor = -1;
     if (document.body.dataset.view !== 'reader') return;
     layout();
-    if (a > 0) scrollToToken(a, false);
+    if (a > 0 && !(playing && S.mode === 'scroll')) scrollToToken(a, false);
   }, 120);
 }
-/* toute modification de hauteur du texte (images décodées, polices chargées…) recalcule les positions */
 if ('ResizeObserver' in window) {
-  let lastH = 0;
-  new ResizeObserver(entries => {
-    const h = entries[0].contentRect.height;
-    if (Math.abs(h - lastH) > 1) { lastH = h; scheduleLayout(); }
-  }).observe(el.canvas);
   new ResizeObserver(() => { root.style.setProperty('--dock-h', el.dock.offsetHeight + 'px'); }).observe(el.dock);
+  let lastW = 0, lastH = 0;
+  new ResizeObserver(entries => {
+    const r = entries[0].contentRect;
+    if (Math.abs(r.width - lastW) > 1 || Math.abs(r.height - lastH) > 1) { lastW = r.width; lastH = r.height; scheduleLayout(); }
+  }).observe(el.viewport);
 }
-window.addEventListener('resize', () => scheduleLayout());
 
 /* ------------------------------------------------------------------------
    7. Apparence : thème, contraste, typographie, masque
@@ -1866,37 +2026,48 @@ function applyTypography() {
   root.style.setProperty('--ls', S.ls.toFixed(3) + 'em');
   root.style.setProperty('--col', S.width + 'ch');
 }
+/* Les changements de typographie sont regroupés (une seule mise en page par image affichée),
+   et la ligne lue reste à sa place, même pendant le défilement. */
+let typoRaf = 0, typoAnchor = -1;
 function changeTypography(mutator) {
-  const a = anchorToken();
+  if (typoAnchor < 0) typoAnchor = anchorToken();
   mutator();
-  applyTypography();
-  if (a >= 0 && document.body.dataset.view === 'reader') {
-    R.fontPx = parseFloat(getComputedStyle(el.canvas).fontSize) || R.fontPx;
-    const y = liveTop(a) + R.fontPx * 0.6 - R.readY;
-    el.viewport.scrollTop = Math.max(0, y); syncScrollPos();
-  }
-  scheduleLayout(a);
   saveSettings();
-  syncSettingsUI();
+  if (typoRaf) return;
+  typoRaf = requestAnimationFrame(() => {
+    typoRaf = 0;
+    const a = typoAnchor; typoAnchor = -1;
+    applyTypography();
+    if (a >= 0 && document.body.dataset.view === 'reader') {
+      R.fontPx = parseFloat(getComputedStyle(el.canvas).fontSize) || R.fontPx;
+      R.lineH = R.fontPx * S.lh;
+      const y = liveTop(a) + R.fontPx * 0.6 - R.readY;
+      el.viewport.scrollTop = Math.max(0, y); syncScrollPos();
+      prompter.dirty = true;
+    }
+    scheduleLayout(a);
+    syncSettingsUI();
+  });
 }
-function setSize(v) { changeTypography(() => { S.size = Math.round(clamp(v, 0.9, 3.5) * 10) / 10; }); }
+function setSize(v) { changeTypography(() => { S.size = Math.round(clamp(v, 0.9, 3.5) * 20) / 20; }); }
 function positionGuides() {
   const inReader = document.body.dataset.view === 'reader';
   const h = R.lineH * S.maskLines + R.fontPx * 0.4;
   const top = Math.round(R.readY - h / 2);
+  const vpTop = inReader ? Math.round(vpRect().top) : 0;
   root.style.setProperty('--band-h', Math.round(h) + 'px');
-  root.style.setProperty('--band-top', top + 'px');
-  root.style.setProperty('--band-mid', R.readY + 'px');
+  root.style.setProperty('--band-top', (vpTop + top) + 'px');
+  root.style.setProperty('--band-mid', (vpTop + R.readY) + 'px');
   root.style.setProperty('--mask-dim', String(S.maskDim));
   root.style.setProperty('--mask-blur', S.maskBlur + 'px');
   const showMask = inReader && S.mask;
   el.maskTop.hidden = el.maskBottom.hidden = el.maskBand.hidden = !showMask;
-  el.readMarks.hidden = !(inReader && !S.mask && playing && S.mode === 'scroll');
+  el.readMarks.hidden = !(inReader && !S.mask && S.marks && playing);
   el.btnMask.setAttribute('aria-pressed', String(S.mask));
 }
 
 /* ------------------------------------------------------------------------
-   8. Vitesse : curseur à paliers (niveaux scolaires) et conversion px/s
+   8. Vitesse : curseur à paliers (niveaux scolaires)
    ------------------------------------------------------------------------ */
 const LEVELS = (DATA.fluence || []).map(r => ({ label: r.niveau, name: r.nom || r.niveau, mid: r.cible }));
 const ANCHORS = [{ mpm: 20, label: '' }].concat(LEVELS.map(l => ({ mpm: l.mid, label: l.label }))).concat([{ mpm: 300, label: '' }]);
@@ -1939,7 +2110,7 @@ function updateSpeedUI() {
   const lv = levelOf(S.mpm);
   el.mpmOut.textContent = String(Math.round(S.mpm));
   el.lvlOut.textContent = lv ? lv.label : '';
-  el.speed.setAttribute('aria-valuetext', `${Math.round(S.mpm)} mots par minute${lv ? ', niveau ' + lv.name : ''}, soit ${nf(pxps(), 1)} pixels par seconde`);
+  el.speed.setAttribute('aria-valuetext', `${Math.round(S.mpm)} mots par minute${lv ? ', niveau ' + lv.name : ''}`);
   $$('.tick', el.ticks).forEach(t => t.classList.toggle('on', !!lv && t.textContent === lv.label));
   if (el.dlgFluence.open) renderFluenceNow();
 }
@@ -1963,36 +2134,132 @@ el.speed.addEventListener('input', () => {
 });
 function stepLevel(dir) {
   const mids = LEVELS.map(l => l.mid);
-  let target;
-  if (dir > 0) target = mids.find(m => m > S.mpm + 0.5);
-  else target = mids.slice().reverse().find(m => m < S.mpm - 0.5);
+  const target = dir > 0 ? mids.find(m => m > S.mpm + 0.5) : mids.slice().reverse().find(m => m < S.mpm - 0.5);
   if (target != null) setMpm(target, true);
 }
 
 /* ------------------------------------------------------------------------
-   9. Défilement (requestAnimationFrame) avec passage accéléré des images
+   9. Prompteur « horloge de lecture »
+   ------------------------------------------------------------------------
+   Le défilement n’avance pas à un nombre fixe de pixels par seconde : il suit
+   les mots. Chaque ligne passe sur la ligne de lecture en exactement le temps
+   nécessaire pour lire ses mots à la vitesse choisie (plus une courte
+   respiration à la ponctuation si « rythme naturel » est actif). Une ligne de
+   3 mots passe donc plus vite qu’une ligne de 12 mots, les espaces entre
+   paragraphes sont franchis au même rythme, et les images en un temps limité.
+   Les décalages inférieurs au pixel sont rendus par une translation GPU, pour un
+   mouvement parfaitement fluide même aux vitesses de CP.
    ------------------------------------------------------------------------ */
 let playing = false;
-const scroll = { raf: 0, last: 0, pos: 0, lastSet: -1 };
-function syncScrollPos() { scroll.pos = el.viewport.scrollTop; scroll.lastSet = el.viewport.scrollTop; }
+const prompter = { raf: 0, last: 0, segs: [], seg: 0, f: 0, base: 0, dirty: true, lastSet: -1, rebuiltAt: 0, frac: 0 };
+const scroll = prompter; /* compatibilité */
+const secPerUnit = () => 60 / S.mpm * R.unitScale;
+function syncScrollPos() { prompter.lastSet = el.viewport.scrollTop; prompter.dirty = true; }
 function maxScroll() { return Math.max(0, el.viewport.scrollHeight - el.viewport.clientHeight); }
-function zoneSpeed(y) {
-  for (const z of R.zones) if (y >= z[0] && y < z[1]) return (z[1] - z[0]) / S.imgTime;
-  return 0;
+/** Construit les lignes et segments autour du mot k0 (fenêtre glissante). */
+function buildWindow(k0) {
+  const N = R.text.length;
+  if (!N) { prompter.segs = []; return; }
+  k0 = clamp(k0, 0, N - 1);
+  const k1 = Math.min(N - 1, k0 + 500);
+  for (let si = secOf(k0), last = secOf(k1); si <= last; si++) ensureTokens(si);
+  const base = el.canvas.getBoundingClientRect().top;
+  const lines = [];
+  let L = null;
+  for (let i = k0; i <= k1; i++) {
+    const t = R.tokens[i];
+    if (!t) continue;
+    const r = t.getBoundingClientRect();
+    if (!r.height) continue;
+    const top = r.top - base;
+    if (!L || top > L.top + L.h * 0.5) {
+      L = { first: i, top, h: r.height, units: 0, words: 0 };
+      lines.push(L);
+    }
+    L.h = Math.max(L.h, r.height);
+    L.units += R.units[i]; L.words += R.isWord[i];
+  }
+  const segs = [];
+  for (let j = 0; j < lines.length - 1; j++) {
+    const a = lines[j], b = lines[j + 1];
+    const ya = a.top + a.h / 2, yb = b.top + b.h / 2;
+    const u = Math.max(0.25, a.units);
+    if (yb - ya > R.lineH * 3.2) {
+      segs.push({ y0: ya, y1: ya + R.lineH, units: u, first: a.first });
+      segs.push({ y0: ya + R.lineH, y1: yb, secs: S.imgTime, first: a.first });
+    } else segs.push({ y0: ya, y1: yb, units: u, first: a.first });
+  }
+  if (lines.length) {
+    const z = lines[lines.length - 1];
+    const y = z.top + z.h / 2;
+    segs.push({ y0: y, y1: y + R.lineH, units: Math.max(0.25, z.units), first: z.first, last: k1 >= N - 1 });
+  }
+  prompter.segs = segs;
+  prompter.base = base + prompter.frac - vpRect().top + el.viewport.scrollTop; /* position du canevas dans la zone défilante (hors translation) */
+  prompter.lines = lines;
+  prompter.rebuiltAt = performance.now();
 }
-function scrollFrame(ts) {
-  if (!playing || S.mode !== 'scroll') return;
-  const dt = scroll.last ? Math.min(0.1, (ts - scroll.last) / 1000) : 0;
-  scroll.last = ts;
+/** Place la tête de lecture d’après la position actuelle de défilement. */
+function resyncPrompter() {
+  buildWindow(Math.max(0, readingToken() - 2));
+  const y = el.viewport.scrollTop + prompter.frac + R.readY - prompter.base;
+  const segs = prompter.segs;
+  prompter.seg = 0; prompter.f = 0;
+  for (let j = 0; j < segs.length; j++) {
+    const s = segs[j];
+    if (y < s.y0) { prompter.seg = j; prompter.f = 0; break; }
+    if (y <= s.y1 || j === segs.length - 1) { prompter.seg = j; prompter.f = clamp((y - s.y0) / Math.max(1, s.y1 - s.y0), 0, 1); break; }
+  }
+  prompter.dirty = false;
+}
+function measurePpw() {
+  const segs = prompter.segs && prompter.segs.length ? prompter.segs : null;
+  if (!segs || prompter.dirty) { try { buildWindow(readingToken()); } catch (e) { return; } }
+  let dy = 0, words = 0;
+  for (const s of prompter.lines || []) words += s.words;
+  for (const s of prompter.segs) if (!s.secs) dy += s.y1 - s.y0;
+  if (words > 10 && dy > 0) R.ppw = dy / words;
+  else R.ppw = R.lineH / Math.max(1, (el.canvas.clientWidth || 600) / (R.fontPx * 3.1));
+}
+function setScrollExact(y) {
   const vp = el.viewport;
-  if (Math.abs(vp.scrollTop - scroll.lastSet) > 3) scroll.pos = vp.scrollTop;
-  const v = Math.max(pxps(), zoneSpeed(scroll.pos + R.readY));
-  scroll.pos += v * dt;
-  const max = maxScroll();
-  if (scroll.pos >= max) { vp.scrollTop = max; syncScrollPos(); stopPlayback(); toast('Fin du texte'); return; }
-  vp.scrollTop = scroll.pos;
-  scroll.lastSet = vp.scrollTop;
-  scroll.raf = requestAnimationFrame(scrollFrame);
+  const target = clamp(y, 0, maxScroll());
+  vp.scrollTop = target;
+  const got = vp.scrollTop;
+  prompter.lastSet = got;
+  const frac = target - got;
+  if (Math.abs(frac - prompter.frac) > 0.01) { prompter.frac = frac; el.page.style.transform = frac ? `translate3d(0,${(-frac).toFixed(2)}px,0)` : ''; }
+  return got;
+}
+function clearFrac() { prompter.frac = 0; el.page.style.transform = ''; }
+function prompterFrame(ts) {
+  if (!playing || S.mode !== 'scroll') return;
+  const vp = el.viewport;
+  const dt = prompter.last ? Math.min(0.1, (ts - prompter.last) / 1000) : 0;
+  prompter.last = ts;
+  if (Math.abs(vp.scrollTop - prompter.lastSet) > 2 || prompter.dirty || ts - prompter.rebuiltAt > 2500) resyncPrompter();
+  let left = dt;
+  const segs = prompter.segs;
+  while (left > 0 && segs.length) {
+    const s = segs[prompter.seg];
+    const dur = s.secs != null ? Math.max(0.2, s.secs) : s.units * secPerUnit();
+    const need = (1 - prompter.f) * dur;
+    if (left < need) { prompter.f += left / dur; left = 0; }
+    else {
+      left -= need;
+      if (prompter.seg < segs.length - 1) { prompter.seg++; prompter.f = 0; }
+      else if (s.last) { prompter.f = 1; stopPlayback(); toast('Fin du texte'); return; }
+      else { prompter.f = 1; resyncPrompter(); break; }
+    }
+  }
+  if (segs.length && prompter.seg > segs.length - 6 && !segs[segs.length - 1].last) prompter.dirty = true;
+  const s = segs[prompter.seg];
+  if (s) {
+    const y = s.y0 + (s.y1 - s.y0) * prompter.f;
+    const got = setScrollExact(prompter.base + y - R.readY);
+    if (got >= maxScroll() - 0.5 && prompter.seg >= segs.length - 1 && s.last) { stopPlayback(); toast('Fin du texte'); return; }
+  }
+  prompter.raf = requestAnimationFrame(prompterFrame);
 }
 let smoothRaf = 0;
 function smoothScrollTo(y, dur = 360) {
@@ -2020,25 +2287,24 @@ function setBars(top, bottom) {
   const reader = document.body.dataset.view === 'reader';
   el.hotTop.hidden = !reader || top;
   el.hotBottom.hidden = !reader || bottom;
+  if (!bottom) closeSizePop();
 }
 function showChrome() { clearTimeout(chrome.hideT); setBars(true, true); }
 function barsHidden() { return el.appbar.classList.contains('is-hidden') || el.dock.classList.contains('is-hidden'); }
+function panelOpen() { return !!document.querySelector('dialog[open]') || el.sizePop.classList.contains('open'); }
 function scheduleHide(ms = 2600) {
   clearTimeout(chrome.hideT);
   if (!playing) return;
   chrome.hideT = setTimeout(() => {
-    if (!playing || document.querySelector('dialog[open]')) return;
+    if (!playing || panelOpen()) return;
     const focusIn = el.dock.contains(document.activeElement) && document.activeElement.matches(':focus-visible');
     setBars(chrome.overTop, chrome.overBottom || focusIn);
   }, ms);
 }
-/* survol à la souris uniquement (les touchers ne doivent pas « bloquer » l’affichage) */
 const onMouse = fn => e => { if (e.pointerType === 'mouse') fn(e); };
 el.hotTop.addEventListener('pointerenter', onMouse(() => { setBars(true, !el.dock.classList.contains('is-hidden')); }));
 el.hotBottom.addEventListener('pointerenter', onMouse(() => { setBars(!el.appbar.classList.contains('is-hidden'), true); }));
-/* au toucher (ou au clic), les zones haute et basse font revenir les deux menus */
 [el.hotTop, el.hotBottom].forEach(h => h.addEventListener('click', () => { setBars(true, true); scheduleHide(3500); }));
-/* après un clic ou un toucher sur un bouton du dock, la barre d’espace doit relancer la lecture, pas ce bouton */
 el.dock.addEventListener('pointerup', e => {
   const b = e.target.closest('button, input[type="range"]');
   if (b && e.pointerType !== '') setTimeout(() => { if (document.activeElement === b) b.blur(); }, 0);
@@ -2057,7 +2323,7 @@ let statsQueued = false, statsLast = 0;
 function requestStats() {
   if (statsQueued) return;
   statsQueued = true;
-  const wait = playing ? Math.max(0, 250 - (performance.now() - statsLast)) : 0;
+  const wait = playing ? Math.max(0, 400 - (performance.now() - statsLast)) : 0;
   setTimeout(() => requestAnimationFrame(() => { statsQueued = false; statsLast = performance.now(); updateStats(); }), wait);
 }
 function fmtTime(min) {
@@ -2068,10 +2334,10 @@ function fmtTime(min) {
 }
 function readCount() {
   const total = R.totalWords || 0;
-  if (!total) return 0;
+  if (!total || document.body.dataset.view !== 'reader') return 0;
   const voice = S.mode === 'voice' && tts.cur >= 0;
-  const tok = voice ? tts.cur + 1 : readingToken();
-  let read = R.wordPrefix[clamp(tok, 0, R.tokens.length)] || 0;
+  const k = voice ? tts.cur + 1 : readingToken();
+  let read = R.wordPrefix[clamp(k, 0, R.text.length)] || 0;
   const max = maxScroll();
   if (!voice && max > 0 && el.viewport.scrollTop >= max - 2) read = total;
   if (el.viewport.scrollTop < 2 && !(voice && tts.cur > 0)) read = 0;
@@ -2088,16 +2354,16 @@ function updateStats() {
 }
 let posT = 0;
 function savePosition() {
-  if (!R.meta || R.meta.demo || !R.tokens.length) return;
-  const tok = anchorToken();
+  if (!R.meta || R.meta.demo || !R.text.length || document.body.dataset.view !== 'reader') return;
+  const t = anchorToken();
   const progress = Math.round(readCount() / Math.max(1, R.totalWords) * 100);
-  R.meta.tok = tok; R.meta.progress = progress; R.meta.openedAt = Date.now();
-  lib.patch(R.meta.id, { tok, progress, openedAt: R.meta.openedAt }).catch(() => {});
+  R.meta.tok = t; R.meta.progress = progress; R.meta.openedAt = Date.now();
+  lib.patch(R.meta.id, { tok: t, progress, openedAt: R.meta.openedAt }).catch(() => {});
 }
 el.viewport.addEventListener('scroll', () => {
   requestStats();
   clearTimeout(posT);
-  posT = setTimeout(savePosition, 1000);
+  posT = setTimeout(savePosition, playing ? 3000 : 1000);
 }, { passive: true });
 window.addEventListener('pagehide', savePosition);
 document.addEventListener('visibilitychange', () => {
@@ -2129,7 +2395,7 @@ function runCountdown(n, done) {
   }, 800);
 }
 function startPlayback() {
-  if (playing || !R.tokens.length) return;
+  if (playing || !R.text.length) return;
   playing = true;
   setPlayUI();
   lockScreen();
@@ -2139,8 +2405,7 @@ function startPlayback() {
   } else {
     clearHighlights(); tts.cur = -1; tts.sent = -1;
     if (el.viewport.scrollTop >= maxScroll() - 2) el.viewport.scrollTop = 0;
-    syncScrollPos();
-    const go = () => { scroll.last = 0; syncScrollPos(); scroll.raf = requestAnimationFrame(scrollFrame); };
+    const go = () => { prompter.last = 0; resyncPrompter(); prompter.raf = requestAnimationFrame(prompterFrame); };
     if (S.countdown > 0 && readingToken() < 4) runCountdown(S.countdown, go); else go();
   }
   positionGuides();
@@ -2150,7 +2415,8 @@ function stopPlayback(silent) {
   clearTimeout(countdownT); el.countdown.hidden = true;
   if (!playing) { setPlayUI(); return; }
   playing = false;
-  cancelAnimationFrame(scroll.raf);
+  cancelAnimationFrame(prompter.raf);
+  if (prompter.frac) { const y = el.viewport.scrollTop; clearFrac(); el.viewport.scrollTop = y; }
   voiceStop();
   unlockScreen();
   setPlayUI();
@@ -2161,19 +2427,17 @@ function stopPlayback(silent) {
 function togglePlay() { playing ? stopPlayback() : startPlayback(); }
 function stopAndHome() { stopPlayback(); savePosition(); location.hash = '#/'; }
 function jump(sec) {
-  if (!R.tokens.length) return;
+  if (!R.text.length) return;
+  const base = (S.mode === 'voice' && tts.cur >= 0) ? tts.cur : readingToken();
+  const words = Math.max(1, Math.round(S.mpm * Math.abs(sec) / 60));
+  let k = base, n = 0;
+  const dir = sec > 0 ? 1 : -1;
+  while (n < words && k + dir >= 0 && k + dir < R.text.length) { k += dir; if (R.isWord[k]) n++; }
   if (S.mode === 'voice') {
-    const base = tts.cur >= 0 ? tts.cur : readingToken();
-    const words = Math.max(1, Math.round(S.mpm * Math.abs(sec) / 60));
-    let k = base, n = 0;
-    const dir = sec > 0 ? 1 : -1;
-    while (n < words && k + dir >= 0 && k + dir < R.tokens.length) { k += dir; if (R.isWord[k]) n++; }
     highlightSentence(-1);
     if (playing) voiceStart(k); else setCurrent(k);
-  } else {
-    const y = el.viewport.scrollTop + pxps() * sec;
-    if (playing) { el.viewport.scrollTop = clamp(y, 0, maxScroll()); syncScrollPos(); } else smoothScrollTo(y);
-  }
+  } else if (playing) { clearFrac(); scrollToToken(k, false); prompter.dirty = true; }
+  else scrollToToken(k, true);
 }
 function setMode(mode) {
   if (mode === S.mode) return;
@@ -2193,23 +2457,22 @@ function setMode(mode) {
    ------------------------------------------------------------------------ */
 function clearHighlights() { $$('.t.hl, .t.hs', el.canvas).forEach(t => t.classList.remove('hl', 'hs')); }
 function highlightSentence(si) {
-  const { sentences, tokens } = R;
-  if (tts.sent >= 0 && sentences[tts.sent]) { const [a, b] = sentences[tts.sent]; for (let i = a; i <= b; i++) tokens[i].classList.remove('hs'); }
+  const { sentences } = R;
+  if (tts.sent >= 0 && sentences[tts.sent]) { const [a, b] = sentences[tts.sent]; for (let i = a; i <= b; i++) { const t = R.tokens[i]; if (t) t.classList.remove('hs'); } }
   tts.sent = si;
   if (si < 0 || !(S.hl === 'sentence' || S.hl === 'both') || !sentences[si]) return;
   const [a, b] = sentences[si];
-  for (let i = a; i <= b; i++) tokens[i].classList.add('hs');
+  for (let i = a; i <= b; i++) { const t = tok(i); if (t) t.classList.add('hs'); }
 }
 function setCurrent(k) {
-  const toks = R.tokens;
-  if (!toks[k]) return;
-  if (tts.cur >= 0 && toks[tts.cur]) toks[tts.cur].classList.remove('hl');
+  const t = tok(k);
+  if (!t) return;
+  if (tts.cur >= 0 && R.tokens[tts.cur]) R.tokens[tts.cur].classList.remove('hl');
   tts.cur = k;
   if (R.sentenceOf && R.sentenceOf[k] !== tts.sent) highlightSentence(R.sentenceOf[k]);
-  if (S.hl === 'word' || S.hl === 'both') toks[k].classList.add('hl');
-  const r = toks[k].getBoundingClientRect();
-  const vpTop = el.viewport.getBoundingClientRect().top;
-  const center = r.top - vpTop + r.height / 2;
+  if (S.hl === 'word' || S.hl === 'both') t.classList.add('hl');
+  const r = t.getBoundingClientRect();
+  const center = r.top - vpRect().top + r.height / 2;
   if (Math.abs(center - R.readY) > R.lineH * 0.45) smoothScrollTo(el.viewport.scrollTop + center - R.readY);
   requestStats();
 }
@@ -2442,7 +2705,7 @@ function wordTimes(ch, phonemes, dur) {
     if (cur) groups.push(cur);
     if (groups.length === words.length) weights = groups;
   }
-  if (!weights) weights = words.map(i => { const t = R.tokens[i].textContent; return Math.max(1, (t.match(/[\p{L}\p{N}]/gu) || []).length) + (/[,;:]$/.test(t) ? 3 : 0) + (SENT_END.test(t) ? 4 : 0); });
+  if (!weights) weights = words.map(i => { const t = R.text[i]; return Math.max(1, (t.match(/[\p{L}\p{N}]/gu) || []).length) + (/[,;:]$/.test(t) ? 3 : 0) + (SENT_END.test(t) ? 4 : 0); });
   const total = weights.reduce((a, b) => a + b, 0);
   const lead = Math.min(0.08, dur * 0.05), span = Math.max(0.1, dur - lead - Math.min(0.15, dur * 0.06));
   const out = [];
@@ -2462,7 +2725,8 @@ function buildChunks(fromTok) {
   const mode = chunkMode();
   const g = clamp(Math.round(S.mpm / 22), 1, 5);
   const chunks = [];
-  const { sentences, sentenceOf, tokens, isWord } = R;
+  const { sentences, sentenceOf, isWord } = R;
+  const tokens = R.text;
   let si = sentenceOf[clamp(fromTok, 0, tokens.length - 1)] || 0;
   let first = true;
   for (; si < sentences.length; si++) {
@@ -2471,7 +2735,7 @@ function buildChunks(fromTok) {
     let start = a, words = 0;
     for (let i = a; i <= b; i++) {
       if (isWord[i]) words++;
-      const t = tokens[i].textContent;
+      const t = tokens[i];
       const last = i === b;
       let cut = last;
       if (!last) {
@@ -2491,7 +2755,7 @@ function chunkText(ch) {
   if (ch.text) return ch;
   let text = '';
   const offs = [];
-  for (let i = ch.a; i <= ch.b; i++) { offs.push(text.length); text += R.tokens[i].textContent + ' '; }
+  for (let i = ch.a; i <= ch.b; i++) { offs.push(text.length); text += R.text[i] + ' '; }
   ch.text = text.replace(/[«»“”]/g, '"').trim();
   ch.offs = offs;
   return ch;
@@ -2584,8 +2848,8 @@ function restartVoiceSoon() {
 }
 function voiceStartToken() {
   const cur = tts.cur;
-  if (cur >= 0 && R.tokens[cur]) {
-    const r = R.tokens[cur].getBoundingClientRect();
+  if (cur >= 0 && tok(cur)) {
+    const r = tok(cur).getBoundingClientRect();
     if (r.top > 0 && r.bottom < window.innerHeight) return cur;
   }
   return readingToken();
@@ -2638,7 +2902,7 @@ let libCache = [];
 async function renderHome() {
   libCache = (await lib.all()).sort((a, b) => (b.openedAt || 0) - (a.openedAt || 0));
   const q = ($('#libSearch').value || '').trim().toLowerCase();
-  const list = q ? libCache.filter(m => m.name.toLowerCase().includes(q)) : libCache;
+  const list = q ? libCache.filter(m => (m.name + ' ' + (m.author || '')).toLowerCase().includes(q)) : libCache;
   $('#libCount').textContent = libCache.length ? `(${libCache.length})` : '';
   const grid = $('#libGrid');
   grid.replaceChildren();
@@ -2649,13 +2913,14 @@ async function renderHome() {
     const pct = clamp(m.progress || 0, 0, 100);
     card.innerHTML = `<span class="doc-kind">${esc(KIND_LABEL[m.kind] || 'TEXTE')}</span>
       <h3><button class="open" type="button">${esc(m.name)}</button></h3>
+      ${m.author ? `<p class="doc-author">${esc(m.author)}</p>` : ''}
       <p class="doc-meta">${nf(m.words || 0)} mots · ${m.openedAt ? 'lu le ' + esc(fmtDate(m.openedAt)) : 'ajouté le ' + esc(fmtDate(m.createdAt || Date.now()))}${m.session ? ' · <strong>non enregistré</strong>' : ''}</p>
       <div class="doc-foot"><div class="bar"><span style="width:${pct}%"></span></div><span class="pct">${pct} %</span></div>
-      <div class="doc-actions"><button class="btn icon ghost" type="button" data-a="rename" title="Renommer"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg><span class="sr-only">Renommer « ${esc(m.name)} »</span></button><button class="btn icon ghost" type="button" data-a="delete" title="Supprimer"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg><span class="sr-only">Supprimer « ${esc(m.name)} »</span></button></div>`;
+      <div class="doc-actions"><button class="btn icon ghost" type="button" data-a="rename" title="Modifier le titre et l’auteur"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg><span class="sr-only">Modifier le titre et l’auteur de « ${esc(m.name)} »</span></button><button class="btn icon ghost" type="button" data-a="delete" title="Supprimer"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg><span class="sr-only">Supprimer « ${esc(m.name)} »</span></button></div>`;
     card.querySelector('.open').addEventListener('click', () => openDoc(m.id));
     card.querySelector('[data-a="rename"]').addEventListener('click', async () => {
-      const n = window.prompt('Nouveau titre :', m.name);
-      if (n && n.trim()) { await lib.patch(m.id, { name: n.trim().slice(0, 160) }); renderHome(); }
+      const r = await askMeta({ title: m.name, author: m.author || '', info: `${KIND_LABEL[m.kind] || 'Texte'} · ${nf(m.words || 0)} mots`, edit: true });
+      if (r) { await lib.patch(m.id, { name: r.title, author: r.author }); if (R.meta && R.meta.id === m.id) { R.meta.name = r.title; R.meta.author = r.author; } renderHome(); }
     });
     card.querySelector('[data-a="delete"]').addEventListener('click', async () => {
       if (!window.confirm(`Supprimer « ${m.name} » de la bibliothèque ?`)) return;
@@ -2667,7 +2932,7 @@ async function renderHome() {
   const last = libCache.find(m => (m.progress || 0) > 0 && (m.progress || 0) < 100);
   $('#resumeCard').hidden = !last;
   if (last) {
-    $('#resumeTitle').textContent = last.name;
+    $('#resumeTitle').textContent = last.author ? `${last.name} — ${last.author}` : last.name;
     $('#resumeMeta').textContent = `${last.progress} % lus · ${nf(last.words || 0)} mots`;
     $('#resumeBar').style.width = last.progress + '%';
     $('#btnResume').onclick = () => openDoc(last.id);
@@ -2681,10 +2946,37 @@ async function renderHome() {
 $('#libSearch').addEventListener('input', () => renderHome());
 $('#btnDemo').addEventListener('click', () => { location.hash = '#/demo'; });
 
-async function addToLibrary(title, frag, kind) {
+/** Fenêtre « titre et auteur » : renvoie { title, author } ou null si l’utilisateur annule. */
+function askMeta(o) {
+  return new Promise(resolve => {
+    const d = el.dlgMeta, t = $('#metaTitle'), a = $('#metaAuthor');
+    $('#hMeta').textContent = o.edit ? 'Modifier le texte' : 'Ajouter à la bibliothèque';
+    $('#btnMetaOk').innerHTML = o.edit ? 'Enregistrer' : '<svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Ajouter et lire';
+    $('#metaInfo').textContent = o.info || '';
+    t.value = o.title || ''; a.value = o.author || '';
+    const dl = $('#authorList');
+    dl.replaceChildren(...Array.from(new Set(libCache.map(m => m.author).filter(Boolean))).sort().map(x => new Option(x)));
+    let done = false;
+    const finish = v => { if (done) return; done = true; d.close(); resolve(v); };
+    const ok = () => {
+      const title = t.value.trim();
+      if (!title) { t.focus(); t.setAttribute('aria-invalid', 'true'); $('#metaErr').hidden = false; return; }
+      t.removeAttribute('aria-invalid'); $('#metaErr').hidden = true;
+      finish({ title: title.slice(0, 160), author: a.value.trim().slice(0, 120) });
+    };
+    $('#btnMetaOk').onclick = ok;
+    $('#btnMetaCancel').onclick = () => finish(null);
+    t.onkeydown = a.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); ok(); } };
+    d.addEventListener('close', () => finish(null), { once: true });
+    $('#metaErr').hidden = true;
+    try { d.showModal(); } catch (e) { d.setAttribute('open', ''); }
+    setTimeout(() => { t.focus(); t.select(); }, 30);
+  });
+}
+async function addToLibrary(title, frag, kind, author = '') {
   const html = fragToHtml(frag);
   const words = (fragTextWords(frag));
-  const meta = { id: newId(), name: String(title || 'Sans titre').slice(0, 160), kind, words, createdAt: Date.now(), openedAt: Date.now(), tok: 0, progress: 0, size: html.length };
+  const meta = { id: newId(), name: String(title || 'Sans titre').slice(0, 160), author: String(author || '').slice(0, 120), kind, words, createdAt: Date.now(), openedAt: Date.now(), tok: 0, progress: 0, size: html.length };
   const saved = await lib.put(meta, html);
   if (saved === 'quota') toast('Espace de stockage plein : ce texte est ouvert mais ne sera pas conservé. Supprimez ou exportez des textes de la bibliothèque.', 7000);
   else if (saved === 'indispo') toast('Ce navigateur ne permet pas d’enregistrer la bibliothèque (navigation privée ?) : le texte ne sera pas conservé.', 7000);
@@ -2723,8 +3015,13 @@ async function importFile(file) {
       case 'pdf': res = await parsePdf(buf, file.name, progress); break;
       default: throw new Error(`Format non pris en charge : .${ext}. Formats acceptés : PDF, EPUB, DOCX, MD, TXT, HTML.`);
     }
+    busy(false);
+    if (libCache.length === 0) libCache = await lib.all();
+    const junk = /^(anonymous|anonyme|unknown|inconnu|admin|administrat(or|eur)|user|utilisateur.*|microsoft office.*|python-docx|author|auteur|owner|propriétaire|\W*)$/i;
+    const choice = await askMeta({ title: res.title, author: junk.test(res.author || '') ? '' : res.author, info: `${KIND_LABEL[kind] || ext.toUpperCase()} · ${nf(fragTextWords(res.frag))} mots · ${file.name}` });
+    if (!choice) { toast('Import annulé : rien n’a été ajouté.'); return; }
     busy(true, 'Rangement dans la bibliothèque…', null);
-    const meta = await addToLibrary(res.title, res.frag, kind);
+    const meta = await addToLibrary(choice.title, res.frag, kind, choice.author);
     busy(false);
     toast(`« ${meta.name} » ajouté : ${nf(meta.words)} mots.`);
     openDoc(meta.id);
@@ -2773,10 +3070,6 @@ pasteBox.addEventListener('paste', e => {
   e.preventDefault();
   const frag = clipToFrag(cd.getData('text/html'), cd.getData('text/plain'));
   insertFragment(frag);
-  if (!$('#pasteTitle').value.trim()) {
-    const first = (pasteBox.innerText || '').trim().split('\n')[0].trim().slice(0, 70);
-    if (first) $('#pasteTitle').placeholder = first;
-  }
 });
 pasteBox.addEventListener('drop', e => { if (hasFiles(e)) return; e.preventDefault(); const dt = e.dataTransfer; insertFragment(clipToFrag(dt.getData('text/html'), dt.getData('text/plain'))); });
 $('#btnClip').addEventListener('click', async () => {
@@ -2797,13 +3090,16 @@ $('#btnClip').addEventListener('click', async () => {
     pasteBox.focus();
   }
 });
-$('#btnPasteClear').addEventListener('click', () => { pasteBox.replaceChildren(); $('#pasteTitle').value = ''; $('#pasteTitle').placeholder = 'Ex. : Le Petit Prince — chapitre 1'; pasteBox.focus(); });
+$('#btnPasteClear').addEventListener('click', () => { pasteBox.replaceChildren(); pasteBox.focus(); });
 $('#btnPasteRead').addEventListener('click', async () => {
   if (!pasteBox.textContent.trim() && !pasteBox.querySelector('img')) { toast('La zone est vide : collez d’abord un texte.'); pasteBox.focus(); return; }
   const frag = sanitize(pasteBox, { styles: true, keepSpacing: true });
-  const title = $('#pasteTitle').value.trim() || ((pasteBox.innerText || '').trim().split('\n')[0].trim().slice(0, 70)) || 'Texte collé';
-  const meta = await addToLibrary(title, frag, 'texte');
-  pasteBox.replaceChildren(); $('#pasteTitle').value = '';
+  const guess = ((pasteBox.innerText || '').trim().split('\n')[0].trim().slice(0, 70)) || 'Texte collé';
+  if (libCache.length === 0) libCache = await lib.all();
+  const choice = await askMeta({ title: guess, author: '', info: `Texte collé · ${nf(fragTextWords(frag))} mots` });
+  if (!choice) return;
+  const meta = await addToLibrary(choice.title, frag, 'texte', choice.author);
+  pasteBox.replaceChildren();
   toast(`« ${meta.name} » ajouté à la bibliothèque.`);
   openDoc(meta.id);
 });
@@ -2824,8 +3120,10 @@ function buildToc() {
     b.textContent = h.textContent.trim().replace(/\s+/g, ' ').slice(0, 140);
     b.addEventListener('click', () => {
       el.dlgToc.close();
+      const sec = h.closest('.sec');
+      if (sec) ensureTokens(+sec.dataset.i);
       const first = h.querySelector('.t');
-      const i = first ? R.tokens.indexOf(first) : -1;
+      const i = first ? tokenIndexOfSpan(first) : -1;
       if (playing) stopPlayback();
       if (i >= 0) { if (S.mode === 'voice') { highlightSentence(-1); tts.cur = -1; } scrollToToken(i, true); if (S.mode === 'voice') setTimeout(() => setCurrent(i), 400); }
     });
@@ -2943,6 +3241,9 @@ function syncSettingsUI() {
   }
   $('#setFont').value = S.font;
   $('#setMask').checked = S.mask;
+  $('#setPauses').checked = S.pauses;
+  $('#setMarks').checked = S.marks;
+  el.sizeRange.value = String(S.size); paintRange(el.sizeRange);
   $('#setHl').value = S.hl;
   $('#setOnline').checked = S.allowOnline;
   $$('input[name="engine"]').forEach(r => { r.checked = r.value === S.engine; });
@@ -2977,6 +3278,8 @@ $('#setFont').addEventListener('change', e => {
 });
 $$('input[name="theme"]').forEach(r => r.addEventListener('change', () => { if (r.checked) { S.theme = r.value; applyTheme(); saveSettings(); } }));
 $('#setMask').addEventListener('change', e => { S.mask = e.target.checked; positionGuides(); saveSettings(); syncSettingsUI(); });
+$('#setPauses').addEventListener('change', e => { S.pauses = e.target.checked; if (R.text.length) { computeUnits(); prompter.dirty = true; } saveSettings(); });
+$('#setMarks').addEventListener('change', e => { S.marks = e.target.checked; positionGuides(); saveSettings(); });
 $('#setHl').addEventListener('change', e => {
   S.hl = e.target.value; saveSettings();
   if (tts.cur >= 0) { const c = tts.cur, s0 = tts.sent; clearHighlights(); tts.cur = -1; tts.sent = -1; if (s0 >= 0) highlightSentence(s0); setCurrent(c); }
@@ -3070,7 +3373,7 @@ async function importBackup(file) {
       if (!d || typeof d.html !== 'string') continue;
       const frag = sanitize(d.html, { styles: true, keepSpacing: true });
       const html = fragToHtml(frag);
-      const meta = { id: typeof d.id === 'string' && d.id.length < 80 ? d.id : newId(), name: String(d.name || 'Texte importé').slice(0, 160), kind: KIND_LABEL[d.kind] ? d.kind : 'texte', words: Number(d.words) || fragTextWords(frag), createdAt: Number(d.createdAt) || Date.now(), openedAt: Number(d.openedAt) || Date.now(), tok: Number.isInteger(d.tok) ? d.tok : 0, progress: clamp(Number(d.progress) || 0, 0, 100), size: html.length };
+      const meta = { id: typeof d.id === 'string' && d.id.length < 80 ? d.id : newId(), name: String(d.name || 'Texte importé').slice(0, 160), author: String(d.author || '').slice(0, 120), kind: KIND_LABEL[d.kind] ? d.kind : 'texte', words: Number(d.words) || fragTextWords(frag), createdAt: Number(d.createdAt) || Date.now(), openedAt: Number(d.openedAt) || Date.now(), tok: Number.isInteger(d.tok) ? d.tok : 0, progress: clamp(Number(d.progress) || 0, 0, 100), size: html.length };
       await lib.put(meta, html); n++;
     }
     toast(`Sauvegarde importée : ${n} texte${n > 1 ? 's' : ''}${data.settings ? ' et vos réglages' : ''}.`, 4000);
@@ -3105,10 +3408,24 @@ $$('[data-act]').forEach(b => b.addEventListener('click', () => {
    21. Fenêtres, boutons, clavier, gestes
    ------------------------------------------------------------------------ */
 function openDialog(d) {
-  if (playing && d !== el.dlgSettings) stopPlayback();
+  if (playing) stopPlayback();
   showChrome();
   try { d.showModal(); } catch (e) { d.setAttribute('open', ''); }
 }
+/* Le panneau Réglages ne bloque pas la page : la lecture continue et chaque changement est visible aussitôt.
+   La zone de lecture se décale pour rester entièrement visible à côté (ou au-dessus sur mobile). */
+function openSettings() {
+  buildFontSelect(); syncSettingsUI(); renderVoiceSelect(); renderPiper();
+  const d = el.dlgSettings;
+  if (d.open) { d.close(); return; }
+  try { d.show(); } catch (e) { d.setAttribute('open', ''); }
+  document.body.classList.add('settings-open');
+  clearTimeout(chrome.hideT); setBars(true, true);
+  scheduleLayout();
+  setTimeout(() => { const f = d.querySelector('[data-close]'); if (f) f.focus({ preventScroll: true }); }, 30);
+}
+el.dlgSettings.addEventListener('close', () => { document.body.classList.remove('settings-open'); scheduleLayout(); scheduleHide(1500); });
+el.dlgSettings.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); el.dlgSettings.close(); } });
 let lastPointer = false;
 window.addEventListener('pointerdown', () => { lastPointer = true; }, true);
 window.addEventListener('keydown', () => { lastPointer = false; }, true);
@@ -3120,7 +3437,7 @@ $$('dialog').forEach(d => {
 $$('[data-open]').forEach(b => b.addEventListener('click', () => openDialog($('#' + b.dataset.open))));
 $('#btnToc').addEventListener('click', () => openDialog(el.dlgToc));
 $('#btnFluence').addEventListener('click', () => { renderFluenceNow(); openDialog(el.dlgFluence); });
-$('#btnSettings').addEventListener('click', () => { if (playing) stopPlayback(); buildFontSelect(); syncSettingsUI(); renderVoiceSelect(); renderPiper(); openDialog(el.dlgSettings); });
+$('#btnSettings').addEventListener('click', openSettings);
 $('#btnAbout').addEventListener('click', () => openDialog(el.dlgAbout));
 $('#btnPrivacy').addEventListener('click', () => openDialog(el.dlgPrivacy));
 $('#brand').addEventListener('click', e => { if (document.body.dataset.view === 'reader') { e.preventDefault(); stopAndHome(); } });
@@ -3128,8 +3445,16 @@ el.btnPlay.addEventListener('click', () => { if (S.mode === 'voice' && S.engine 
 $('#btnStop').addEventListener('click', stopAndHome);
 $('#btnBack').addEventListener('click', () => jump(-10));
 $('#btnFwd').addEventListener('click', () => jump(10));
-$('#btnSmaller').addEventListener('click', () => setSize(S.size - 0.1));
-$('#btnBigger').addEventListener('click', () => setSize(S.size + 0.1));
+/* curseur de taille du texte (dans le dock ; en fenêtre flottante sur mobile) */
+el.sizeRange.addEventListener('input', () => { paintRange(el.sizeRange); setSize(parseFloat(el.sizeRange.value)); });
+function closeSizePop() { el.sizePop.classList.remove('open'); el.btnSize.setAttribute('aria-expanded', 'false'); }
+el.btnSize.addEventListener('click', () => {
+  const open = !el.sizePop.classList.contains('open');
+  el.sizePop.classList.toggle('open', open);
+  el.btnSize.setAttribute('aria-expanded', String(open));
+  if (open) { clearTimeout(chrome.hideT); setTimeout(() => el.sizeRange.focus({ preventScroll: true }), 30); } else scheduleHide();
+});
+document.addEventListener('pointerdown', e => { if (el.sizePop.classList.contains('open') && !el.sizePop.contains(e.target) && e.target !== el.btnSize && !el.btnSize.contains(e.target)) { closeSizePop(); scheduleHide(); } });
 el.btnVoice.addEventListener('click', () => setMode(S.mode === 'voice' ? 'scroll' : 'voice'));
 el.btnMask.addEventListener('click', () => { S.mask = !S.mask; positionGuides(); saveSettings(); syncSettingsUI(); toast(S.mask ? 'Masque de lecture activé' : 'Masque de lecture désactivé', 1400); });
 function toggleFullscreen() {
@@ -3181,8 +3506,10 @@ el.viewport.addEventListener('touchend', e => {
 }, { passive: true });
 document.addEventListener('gesturestart', e => { if (document.body.dataset.view === 'reader') e.preventDefault(); });
 
+function modalOpen() { return $$('dialog[open]').some(d => d !== el.dlgSettings); }
 document.addEventListener('keydown', e => {
-  if (document.querySelector('dialog[open]')) return;
+  if (modalOpen()) return;
+  if (el.dlgSettings.open && el.dlgSettings.contains(e.target)) return;
   if (document.body.dataset.view !== 'reader') return;
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   const tg = e.target, tag = tg && tg.tagName;
@@ -3223,7 +3550,7 @@ async function migrateV1() {
     if (!db.objectStoreNames.contains('docs')) return;
     const d = await new Promise((res, rej) => { const r = db.transaction('docs').objectStore('docs').get('last'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
     db.close();
-    if (d && typeof d.html === 'string') { const frag = sanitize(d.html); await addToLibrary(d.name || 'Document', frag, 'texte'); }
+    if (d && typeof d.html === 'string') { const frag = sanitize(d.html); await addToLibrary(d.name || 'Document', frag, 'texte', ''); }
   } catch (e) { /* rien à migrer */ }
 }
 async function init() {
@@ -3242,7 +3569,7 @@ async function init() {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (document.body.dataset.view === 'reader') scheduleLayout(); }).catch(() => {});
   if (!lsOK) toast('Stockage local indisponible : vos réglages ne seront pas conservés après fermeture.', 5000);
   await route();
-  window.__lecturePlus = { R, settings: () => S, tts, piper, lib, chrome, version: APP.version };
+  window.__lecturePlus = { R, settings: () => S, tts, piper, lib, chrome, prompter, readingToken, version: APP.version };
 }
 init();
 })();

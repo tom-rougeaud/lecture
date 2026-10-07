@@ -1,7 +1,7 @@
 /* Lecture+ — service worker : ouverture hors connexion.
    Il ne met en cache que les fichiers de l’application (aucune donnée personnelle). */
 'use strict';
-const APP_CACHE = 'lectureplus-app-v2.1.0';
+const APP_CACHE = 'lectureplus-app-v2.2.0';
 const CORE = ['./', './index.html'];
 
 self.addEventListener('install', e => {

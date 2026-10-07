@@ -15,7 +15,11 @@ Lecture+ fait défiler un texte à une vitesse réglée en **mots par minute (MP
 | **Bibliothèque** | Les textes importés sont rangés avec leur position et leur progression. Recherche, renommage, suppression, reprise de lecture. |
 | **Importer le texte** | PDF (texte, titres, images, pages numérisées), EPUB, DOCX, Markdown, TXT, HTML — par glisser-déposer ou depuis les fichiers (ordinateur, tablette, téléphone). |
 | **Coller un texte** | Zone de collage qui **conserve la mise en page** : sauts de ligne, tabulations, tailles relatives, gras, italique, alignements, retraits. |
-| **Vitesse par paliers** | Curseur gradué selon les repères de fin d’année (CP 50, CE1 70, CE2 90, CM1 110, CM2 120, 6e 130, 4e 140, lycée 200 MPM) avec réglage fin entre les paliers. |
+| **Vitesse par paliers** | Curseur gradué selon les repères de fin d’année (CP 50, CE1 70, CE2 90, CM1 110, CM2 120, 6e 130, 4e 140, lycée 160 MPM) avec réglage fin entre les paliers. |
+| **Vitesse exacte** | Le défilement suit les mots : chaque ligne passe en exactement le temps nécessaire pour lire ses mots (écart mesuré : ±2 %). Option « rythme naturel » : courtes respirations aux points, virgules et paragraphes, sans changer la vitesse moyenne. |
+| **Gros livres** | Mise en page à la demande : un livre de 400 000 mots s’ouvre en moins d’une seconde et défile à 60 images par seconde. |
+| **Réglages en direct** | Le panneau Réglages s’ouvre sans arrêter la lecture ; thème, police, taille, masque s’appliquent aussitôt. Curseur de taille du texte dans le dock. |
+| **Titre et auteur** | À chaque ajout, une fenêtre propose le titre et l’auteur trouvés dans le fichier, modifiables ; ils restent modifiables depuis la bibliothèque. |
 | **Voix off** | *Voix naturelle Lecture+* (voix neuronale calculée sur l’appareil) ou voix du système. Le débit et les pauses sont ajustés pour respecter le rythme choisi, même très lent (lecture par groupes de mots). |
 | **Surlignage karaoké** | Mot et/ou phrase surlignés, texte maintenu sur la ligne de lecture. |
 | **Masque de lecture** | Ruban de 1 à 5 lignes, flou et voile réglables autour. |
@@ -27,7 +31,7 @@ Lecture+ fait défiler un texte à une vitesse réglée en **mots par minute (MP
 
 ### Raccourcis clavier
 
-`Espace` lecture / pause · `↑` `↓` vitesse ± 5 MPM · `Page ↑` `Page ↓` niveau précédent / suivant · `←` `→` ± 10 s · `Maj` + `+` / `−` taille du texte · `V` voix · `M` masque · `F` plein écran · `Échap` arrêter et revenir à l’accueil.
+`Espace` lecture / pause (aussi quand le panneau Réglages est ouvert) · `↑` `↓` vitesse ± 5 MPM · `Page ↑` `Page ↓` niveau précédent / suivant · `←` `→` ± 10 s · `Maj` + `+` / `−` taille du texte · `V` voix · `M` masque · `F` plein écran · `Échap` arrêter et revenir à l’accueil.
 
 ---
 
@@ -85,7 +89,7 @@ Valeurs en mots correctement lus par minute, utilisées comme objectifs d’entr
 - école : seuils de fin d’année couramment utilisés dans les circonscriptions (CP 50, CE1 70, CE2 90, CM1 110, CM2 120) ;
 - 4e – 3e : 140, seuil « satisfaisant » de l’évaluation nationale de 4e publiée sur Éduscol (120 à 139 = fragile) ;
 - 6e – 5e : 130, valeur intermédiaire estimée (pas de repère officiel chiffré) ;
-- lycée / adulte : 200, ordre de grandeur du lecteur expert.
+- lycée / adulte : 160, rythme confortable d’un bon lecteur à voix haute (la lecture silencieuse est plus rapide : 200 à 250).
 
 ## Licences et crédits
 
