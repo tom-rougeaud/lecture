@@ -3,10 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' blob: 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'unsafe-inline'; font-src data:; img-src data: blob:; media-src blob: data:; connect-src 'self' data: blob: https://huggingface.co https://*.huggingface.co https://*.hf.co; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' blob: 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'unsafe-inline'; font-src data:; img-src 'self' data: blob:; media-src blob: data:; connect-src 'self' data: blob:; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4eee3">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lecture+">
 <meta name="description" content="Lecture+ : prompteur de lecture accessible, voix off naturelle avec surlignage, guide de fluence et bibliothèque personnelle. Fonctionne sur l’appareil, sans collecte de données.">
 <meta name="author" content="Tom Rougeaud">
 <title>Lecture+</title>
@@ -398,13 +403,6 @@ select option,select optgroup{background:var(--surface);color:var(--ink)}
 .sw-dark{background:#1d1f23;color:#f1ece4}.sw-dark i{background:#d6a676}
 .sw-black{background:#000;color:#f4f1ec}.sw-black i{background:#cfa972}
 .sw-hc{background:#000;color:#ffff00}.sw-hc i{background:#00e5ff}
-.engine-choice{display:grid;gap:8px;margin-bottom:10px}
-.engine{position:relative;display:block}
-.engine input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
-.engine span{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line-2)}
-.engine small{color:var(--muted);font-size:.82rem;line-height:1.35}
-.engine input:checked + span{border-color:var(--accent-text);background:var(--accent-soft)}
-.engine input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
 .reset{margin-top:12px}
 .fluence-list{display:grid;gap:8px;margin:14px 0}
 .lvl-row{all:unset;box-sizing:border-box;display:grid;grid-template-columns:8em 6em 1fr;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);cursor:pointer}
@@ -504,6 +502,12 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
   .page{padding:0!important}
 }
 
+.upd{position:fixed;z-index:75;left:50%;bottom:16px;transform:translateX(-50%);display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 10px;padding:10px 14px;border-radius:14px;background:var(--ink);color:var(--bg);font-weight:600;font-size:.92rem;max-width:min(560px,calc(100% - 24px));box-shadow:0 10px 30px rgba(0,0,0,.28)}
+.upd .btn{background:var(--bg);color:var(--ink);border-color:transparent}
+:root[data-theme="hc"] .upd{background:#ffff00;color:#000}
+.install-steps{margin:6px 0 12px;padding-left:1.3em;line-height:1.6}
+.install-steps .ic{width:1.1em;height:1.1em;vertical-align:-.15em}
+@media print{.upd{display:none!important}}
 </style>
 </head>
 <body data-view="home">
@@ -751,15 +755,6 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
     </section>
     <section class="set">
       <h3>Voix off</h3>
-      <div class="engine-choice" role="radiogroup" aria-label="Moteur de voix">
-        <label class="engine"><input type="radio" name="engine" value="piper"><span><strong>Voix naturelle Lecture+</strong><small>Voix neuronale calculée sur l’appareil. Téléchargement unique (≈ 75 Mo), puis hors ligne.</small></span></label>
-        <label class="engine"><input type="radio" name="engine" value="system"><span><strong>Voix de l’appareil</strong><small>Voix installées sur l’ordinateur, la tablette ou le téléphone.</small></span></label>
-      </div>
-      <div id="piperBox">
-        <div class="row wide"><label for="setPiperVoice">Voix</label><select id="setPiperVoice"></select></div>
-        <p class="muted small" id="piperInfo"></p>
-        <div class="btn-row"><button class="btn sm" type="button" id="btnPiperLoad"><svg class="ic" aria-hidden="true"><use href="#i-down"/></svg>Télécharger cette voix</button><button class="btn sm ghost" type="button" id="btnPiperForget"><svg class="ic" aria-hidden="true"><use href="#i-trash"/></svg>Supprimer du cache</button></div>
-      </div>
       <div id="systemBox">
         <div class="row wide"><label for="setVoice">Voix</label><select id="setVoice"></select></div>
         <label class="check"><input type="checkbox" id="setOnline">Autoriser les voix « en ligne » (Edge, Chrome) : très naturelles, mais le texte lu est envoyé à Microsoft ou Google</label>
@@ -829,12 +824,15 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
       <li>Toucher le haut ou le bas de l’écran : faire revenir les menus.</li>
     </ul>
     <h3>Hors connexion</h3>
-    <p>Après une première visite en ligne, Lecture+ s’ouvre aussi sans réseau (y compris la voix naturelle si elle a été téléchargée). Sur tablette ou téléphone, utilisez « Ajouter à l’écran d’accueil ».</p>
+    <p>Après une première visite en ligne, Lecture+ s’ouvre aussi sans réseau. Sur tablette ou téléphone, utilisez « Ajouter à l’écran d’accueil ».</p>
+    <h3>Installer l’appli</h3>
+    <p>Lecture+ peut s’installer sur l’écran d’accueil, comme une appli, et s’ouvre alors en plein écran.</p>
+    <div class="btn-row"><button class="btn sm" type="button" id="btnInstallOpen" hidden>Installer l’appli</button></div>
     <h3>Voix off</h3>
-    <p>Si aucune voix n’est proposée : utilisez la voix naturelle Lecture+, ou installez une voix française sur l’appareil (Windows : Paramètres › Heure et langue › Voix ; Mac, iPad, iPhone : Accessibilité › Contenu énoncé › Voix ; Android : Paramètres › Accessibilité › Synthèse vocale).</p>
+    <p>Si aucune voix n’est proposée : installez une voix française sur l’appareil (Windows : Paramètres › Heure et langue › Voix ; Mac, iPad, iPhone : Accessibilité › Contenu énoncé › Voix ; Android : Paramètres › Accessibilité › Synthèse vocale).</p>
     <h3>À propos</h3>
-    <p class="muted small">Version <span id="appVersion"></span> · Conception : Tom Rougeaud, professeur de Maths-Sciences en lycée professionnel · Licence <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a> · <a href="https://tom-rougeaud.github.io/casier/" target="_blank" rel="noopener noreferrer">Autres outils</a></p>
-    <p class="muted small">Composants : pdf.js (Apache 2.0), JSZip (MIT), mammoth.js (BSD-2), marked (MIT), ONNX Runtime Web (MIT), piper-phonemize et espeak-ng (MIT / GPL-3.0, fichiers séparés dans le dossier <code>voix/</code>), voix Piper : Siwis (Université d’Édimbourg, CC BY 4.0), UPMC Pierre et Jessica (CC BY-SA 4.0). Polices Inter, Literata, Lexend, Andika, Atkinson Hyperlegible, OpenDyslexic, Playwrite FR, JetBrains Mono (SIL OFL 1.1).</p>
+    <p class="muted small">Version <span id="appVersion"></span> · Conception : Tom Rougeaud · Licence <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a> · <a href="https://tom-rougeaud.github.io/casier/" target="_blank" rel="noopener noreferrer">Autres outils</a></p>
+    <p class="muted small">Composants : pdf.js (Apache 2.0), JSZip (MIT), mammoth.js (BSD-2), marked (MIT). Polices Inter, Literata, Lexend, Andika, Atkinson Hyperlegible, OpenDyslexic, Playwrite FR, JetBrains Mono (SIL OFL 1.1).</p>
   </div>
 </dialog>
 
@@ -847,13 +845,11 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
     <ul>
       <li><code>lectureplus.v2.settings</code> (stockage local) : vos réglages.</li>
       <li>Base IndexedDB <code>lectureplus_v2</code> : votre bibliothèque (textes importés, position et progression).</li>
-      <li>Cache <code>lectureplus-voix-v1</code> : la voix naturelle, si vous l’avez téléchargée.</li>
     </ul>
     <p>Ces données ne sont visibles que dans ce navigateur, sur cet appareil. Elles ne sont ni synchronisées ni sauvegardées ailleurs.</p>
     <h3>Connexions réseau</h3>
     <ul>
       <li><strong>Hébergement</strong> : en ligne, la page est servie par GitHub Pages (GitHub Inc., États-Unis), qui peut enregistrer l’adresse IP des visiteurs dans ses journaux techniques, comme tout hébergeur. Ouvert depuis un fichier sur l’ordinateur, Lecture+ ne se connecte à rien.</li>
-      <li><strong>Voix naturelle Lecture+</strong>, seulement si vous la choisissez : le modèle de voix est téléchargé une fois, depuis le site de Lecture+ s’il y est déposé, sinon depuis Hugging Face (Hugging Face Inc., États-Unis), qui voit alors l’adresse IP de l’appareil. Le <em>texte</em> n’est jamais envoyé : la voix est calculée sur l’appareil.</li>
       <li><strong>Voix « en ligne » de l’appareil</strong> (Edge, Chrome) : désactivées par défaut. Si vous les autorisez, le texte lu est transmis à Microsoft ou Google.</li>
     </ul>
     <p class="muted small">Le cache <code>lectureplus-app</code> conserve uniquement les fichiers de l’application, pour qu’elle s’ouvre hors connexion ; il ne contient aucune donnée personnelle.</p>
@@ -881,20 +877,25 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
   </div>
 </dialog>
 
-<!-- ===== Voix naturelle : consentement au téléchargement ===== -->
-<dialog class="modal" id="dlgVoice" aria-labelledby="hVoice">
-  <div class="sheet-head"><h2 id="hVoice">Voix naturelle Lecture+</h2><button class="btn icon ghost" type="button" data-close title="Fermer"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg><span class="sr-only">Fermer</span></button></div>
+<!-- ===== Installation de l’appli ===== -->
+<dialog class="modal small" id="dlgInstall" aria-labelledby="hInstall">
+  <div class="sheet-head"><h2 id="hInstall">Installer Lecture+</h2><button class="btn icon ghost" type="button" data-close title="Fermer"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg><span class="sr-only">Fermer</span></button></div>
   <div class="sheet-body">
-    <p>Pour une voix bien plus naturelle, Lecture+ peut utiliser une <strong>voix neuronale</strong> calculée directement sur cet appareil.</p>
-    <ul>
-      <li>Téléchargement unique d’environ <strong id="voiceDlSize">75 Mo</strong> (moteur + voix), conservé ensuite dans le navigateur : la voix fonctionne alors hors ligne.</li>
-      <li id="voiceDlSource">Le modèle de voix est téléchargé depuis Hugging Face (États-Unis), qui voit l’adresse IP de l’appareil, sauf s’il a été déposé sur le site de Lecture+.</li>
-      <li>Le texte lu <strong>n’est jamais envoyé</strong> : seule la voix est téléchargée.</li>
-      <li>Conseillé en Wi-Fi. Sur un appareil ancien, la première phrase peut mettre quelques secondes à démarrer.</li>
-    </ul>
+    <p>Ajoutez Lecture+ à l’écran d’accueil : l’appli s’ouvre en plein écran, même sans connexion. <strong>Rien n’est envoyé à un tiers.</strong></p>
+    <div id="installIos" hidden>
+      <ol class="install-steps">
+        <li>Touchez le bouton <strong>Partager</strong> <svg class="ic" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4M5 11v9h14v-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> de Safari.</li>
+        <li>Choisissez <strong>Sur l’écran d’accueil</strong>.</li>
+        <li>Touchez <strong>Ajouter</strong>.</li>
+      </ol>
+    </div>
+    <div id="installOther" hidden>
+      <p>Ouvrez le menu du navigateur (⋮ ou ⋯), puis choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.</p>
+    </div>
     <div class="btn-row">
-      <button class="btn primary" type="button" id="btnVoiceYes" autofocus><svg class="ic" aria-hidden="true"><use href="#i-down"/></svg>Télécharger la voix naturelle</button>
-      <button class="btn" type="button" id="btnVoiceNo">Utiliser la voix de l’appareil</button>
+      <button class="btn primary" type="button" id="btnInstallYes" hidden>Installer l’appli</button>
+      <button class="btn" type="button" id="btnInstallLater">Plus tard</button>
+      <button class="btn ghost" type="button" id="btnInstallNever" hidden>Ne plus proposer</button>
     </div>
   </div>
 </dialog>
@@ -996,7 +997,7 @@ this.attribute(att));if(0===node.children.length||node.children.every(function(e
 (() => {
 'use strict';
 
-const APP = { name: 'Lecture+', version: '2.2.0', key: 'lectureplus.v2', idb: 'lectureplus_v2' };
+const APP = { name: 'Lecture+', version: '2.3.0', key: 'lectureplus.v2', idb: 'lectureplus_v2' };
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -1060,18 +1061,17 @@ const INK = {
 };
 const THEME_BG = { light: '#f7f7f4', beige: '#f4eee3', sepia: '#eadbbf', dark: '#1d1f23', black: '#000000', hc: '#000000' };
 
-const piperPossible = /^https?:$/.test(location.protocol) && 'Worker' in window && typeof WebAssembly === 'object';
 const DEFAULTS = {
   theme: 'beige', contrast: 50, font: 'lexend', size: 1.6, lh: 1.7, ws: 0.06, ls: 0, width: 64,
   mpm: 110, mode: 'scroll', mask: false, maskLines: 2, maskBlur: 6, maskDim: 0.45, readLine: 0.42,
-  imgTime: 1.5, countdown: 3, pauses: true, marks: true, hl: 'both', engine: piperPossible ? 'piper' : 'system', piperVoice: 'siwis-medium',
+  imgTime: 1.5, countdown: 3, pauses: true, marks: true, hl: 'both',
   voiceURI: '', allowOnline: false
 };
 const SCHEMA = {
   theme: THEMES, contrast: [0, 100], font: Object.keys(FONTS), size: [0.9, 3.5], lh: [1.2, 2.5], ws: [0, 1], ls: [0, 0.3],
   width: [30, 100], mpm: [20, 300], mode: ['scroll', 'voice'], mask: 'bool', maskLines: [1, 5], maskBlur: [0, 16],
   maskDim: [0, 0.9], readLine: [0.25, 0.6], imgTime: [0.5, 6], countdown: [0, 5], pauses: 'bool', marks: 'bool', hl: ['word', 'sentence', 'both', 'none'],
-  engine: ['piper', 'system'], piperVoice: 'str', voiceURI: 'str', allowOnline: 'bool'
+  voiceURI: 'str', allowOnline: 'bool'
 };
 function sanitizeSettings(o) {
   const out = Object.assign({}, DEFAULTS);
@@ -1088,8 +1088,6 @@ function sanitizeSettings(o) {
   out.maskLines = Math.round(out.maskLines);
   out.countdown = Math.round(out.countdown);
   out.size = Math.round(out.size * 100) / 100;
-  if (out.engine === 'piper' && !piperPossible) out.engine = 'system';
-  if (!['siwis-medium', 'upmc-pierre', 'upmc-jessica', 'siwis-low'].includes(out.piperVoice)) out.piperVoice = 'siwis-medium';
   return out;
 }
 let S = sanitizeSettings(store.get('settings'));
@@ -1197,7 +1195,7 @@ const el = {
   fileInput: $('#fileInput'), importInput: $('#importInput'),
   dropOverlay: $('#dropOverlay'), busy: $('#busy'), busyText: $('#busyText'), busyBarWrap: $('#busyBarWrap'), busyBar: $('#busyBar'), busyCancel: $('#busyCancel'),
   toast: $('#toast'), countdown: $('#countdown'),
-  dlgSettings: $('#dlgSettings'), dlgFluence: $('#dlgFluence'), dlgToc: $('#dlgToc'), dlgAbout: $('#dlgAbout'), dlgPrivacy: $('#dlgPrivacy'), dlgVoice: $('#dlgVoice'), dlgMeta: $('#dlgMeta')
+  dlgSettings: $('#dlgSettings'), dlgFluence: $('#dlgFluence'), dlgToc: $('#dlgToc'), dlgAbout: $('#dlgAbout'), dlgPrivacy: $('#dlgPrivacy'), dlgMeta: $('#dlgMeta'), dlgInstall: $('#dlgInstall')
 };
 let toastT = 0;
 function toast(msg, ms = 2800) {
@@ -2478,7 +2476,7 @@ function setCurrent(k) {
 }
 
 /* ------------------------------------------------------------------------
-   14. Voix off : moteurs « appareil » (Web Speech) et « naturel » (Piper)
+   14. Voix off : voix de l’appareil (Web Speech)
    ------------------------------------------------------------------------ */
 const synth = window.speechSynthesis || null;
 const tts = { cur: -1, sent: -1, gen: 0, voices: [], voice: null, restartT: 0, waitT: 0 };
@@ -2557,167 +2555,9 @@ const systemEngine = {
   stop() { try { if (synth) synth.cancel(); } catch (e) { /* ignoré */ } }
 };
 
-/* ----- Voix naturelle Lecture+ (Piper, calcul local en WebAssembly) ----- */
-const PIPER_HF = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/';
-const PIPER_VOICES = {
-  'siwis-medium': { label: 'Siwis — voix féminine (recommandée)', path: 'fr/fr_FR/siwis/medium/fr_FR-siwis-medium', mb: 63, credit: 'Siwis, Université d’Édimbourg, CC BY 4.0' },
-  'upmc-pierre': { label: 'Pierre — voix masculine', path: 'fr/fr_FR/upmc/medium/fr_FR-upmc-medium', mb: 77, speaker: 'pierre', credit: 'UPMC Pierre, CC BY-SA 4.0' },
-  'upmc-jessica': { label: 'Jessica — voix féminine', path: 'fr/fr_FR/upmc/medium/fr_FR-upmc-medium', mb: 77, speaker: 'jessica', credit: 'UPMC, CC BY-SA 4.0' },
-  'siwis-low': { label: 'Siwis légère — téléchargement réduit', path: 'fr/fr_FR/siwis/low/fr_FR-siwis-low', mb: 28, credit: 'Siwis, Université d’Édimbourg, CC BY 4.0' }
-};
-const ENGINE_MB = 13;
-function piperUrls(key) {
-  const v = PIPER_VOICES[key] || PIPER_VOICES['siwis-medium'];
-  const file = v.path.split('/').pop();
-  const local = new URL('voix/modeles/' + file, location.href).href;
-  return { modelUrls: [local + '.onnx', PIPER_HF + v.path + '.onnx'], configUrls: [local + '.onnx.json', PIPER_HF + v.path + '.onnx.json'] };
-}
-const piper = {
-  worker: null, ready: false, key: '', loading: null, ctx: null, src: null, msgId: 0, pending: new Map(), cache: new Map(),
-  natural: 160, sr: 22050, cachedKeys: {},
-  available: piperPossible,
-  ensureWorker() {
-    if (this.worker) return this.worker;
-    this.worker = new Worker(new URL('voix/piper-worker.js', location.href).href);
-    this.worker.onmessage = e => this.onMsg(e.data || {});
-    this.worker.onerror = e => {
-      const err = new Error('Moteur de voix introuvable (dossier « voix/ » absent ?)');
-      this.pending.forEach(p => p.reject(err)); this.pending.clear();
-      if (this.loading) { this.loading.reject(err); }
-      e.preventDefault && e.preventDefault();
-    };
-    return this.worker;
-  },
-  onMsg(m) {
-    if (m.type === 'progress' && this.loading) {
-      const pct = m.total ? m.got / m.total * 100 : null;
-      const mb = n => nf(n / 1048576, 0);
-      busy(true, m.total > 1 ? `Téléchargement de la voix : ${mb(m.got)} / ${mb(m.total)} Mo` : (m.label === 'préparation' ? 'Préparation de la voix…' : `Téléchargement : ${m.label}…`), pct, () => this.cancelLoad());
-    } else if (m.type === 'ready' && this.loading) {
-      this.ready = true; this.key = m.key; this.sr = m.sampleRate || 22050;
-      this.cachedKeys[m.key] = true;
-      const l = this.loading; this.loading = null; l.resolve();
-    } else if (m.type === 'error') {
-      if (m.id && this.pending.has(m.id)) { this.pending.get(m.id).reject(new Error(m.msg)); this.pending.delete(m.id); }
-      else if (this.loading) { const l = this.loading; this.loading = null; l.reject(new Error(m.msg)); }
-    } else if ((m.type === 'audio' || m.type === 'cached' || m.type === 'forgotten') && this.pending.has(m.id)) {
-      this.pending.get(m.id).resolve(m); this.pending.delete(m.id);
-    }
-  },
-  call(msg) {
-    const id = ++this.msgId;
-    return new Promise((resolve, reject) => { this.pending.set(id, { resolve, reject }); this.ensureWorker().postMessage(Object.assign({ id }, msg)); });
-  },
-  load(key) {
-    if (this.ready && this.key === key) return Promise.resolve();
-    if (this.loading) return this.loading.promise;
-    if (this.worker && this.key && this.key !== key) { this.worker.terminate(); this.worker = null; this.ready = false; this.cache.clear(); }
-    const urls = piperUrls(key);
-    let resolve, reject;
-    const promise = new Promise((a, b) => { resolve = a; reject = b; });
-    this.loading = { promise, resolve, reject };
-    busy(true, 'Chargement de la voix naturelle…', null, () => this.cancelLoad());
-    this.ensureWorker().postMessage({ type: 'load', key, modelUrls: urls.modelUrls, configUrls: urls.configUrls });
-    return promise.finally(() => busy(false));
-  },
-  cancelLoad() {
-    if (this.worker) { this.worker.terminate(); this.worker = null; }
-    this.ready = false; this.key = '';
-    if (this.loading) { const l = this.loading; this.loading = null; l.reject(new Error('annulé')); }
-  },
-  async isCached(key) {
-    try {
-      const c = await caches.open('lectureplus-voix-v1');
-      const u = piperUrls(key);
-      for (const x of u.modelUrls) if (await c.match(x)) return true;
-    } catch (e) { /* pas de cache */ }
-    return false;
-  },
-  async forget(key) {
-    try { const c = await caches.open('lectureplus-voix-v1'); const u = piperUrls(key); for (const x of u.modelUrls.concat(u.configUrls)) await c.delete(x); } catch (e) { /* ignoré */ }
-    if (this.key === key) { if (this.worker) this.worker.terminate(); this.worker = null; this.ready = false; this.key = ''; }
-  },
-  unlock() {
-    try {
-      if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-      if (this.ctx.state === 'suspended') this.ctx.resume();
-    } catch (e) { /* audio indisponible */ }
-  },
-  ok() { return this.ready; },
-  param() { return clamp(this.natural / S.mpm, 0.78, chunkMode() === 'sentence' ? 1.3 : 1.15); },
-  synth(ch, ls) {
-    const key = ch.a + ':' + ch.b + ':' + ls.toFixed(2);
-    if (this.cache.has(key)) return this.cache.get(key);
-    const v = PIPER_VOICES[S.piperVoice] || {};
-    const p = this.call({ type: 'synth', text: ch.text, lengthScale: ls, speaker: v.speaker || 0 });
-    this.cache.set(key, p);
-    if (this.cache.size > 12) this.cache.delete(this.cache.keys().next().value);
-    return p;
-  },
-  async speak(ch, onWord, ls, gen) {
-    const res = await this.synth(ch, ls);
-    if (gen !== tts.gen) return;
-    this.unlock();
-    const ctx = this.ctx;
-    if (!ctx) throw new Error('Audio indisponible');
-    const pcm = res.pcm;
-    const buf = ctx.createBuffer(1, pcm.length, res.sr || this.sr);
-    buf.copyToChannel ? buf.copyToChannel(pcm, 0) : buf.getChannelData(0).set(pcm);
-    const dur = buf.duration;
-    this.learnDur(ch.words, dur, ls);
-    const times = wordTimes(ch, res.phonemes, dur);
-    return new Promise(resolve => {
-      const src = ctx.createBufferSource();
-      src.buffer = buf; src.connect(ctx.destination);
-      this.src = src;
-      const t0 = ctx.currentTime + 0.02;
-      let raf = 0, idx = -1;
-      const tick = () => {
-        if (gen !== tts.gen) return;
-        const t = ctx.currentTime - t0;
-        while (idx + 1 < times.length && times[idx + 1][1] <= t) { idx++; onWord(times[idx][0]); }
-        raf = requestAnimationFrame(tick);
-      };
-      src.onended = () => { cancelAnimationFrame(raf); if (this.src === src) this.src = null; resolve(); };
-      src.start(t0);
-      raf = requestAnimationFrame(tick);
-    });
-  },
-  learnDur(words, dur, ls) { if (dur > 0.8 && words >= 3) this.natural = clamp(this.natural * 0.6 + (words / (dur / ls) * 60) * 0.4, 100, 260); },
-  learn() { /* la durée exacte est connue : apprentissage fait dans learnDur */ },
-  stop() { try { if (this.src) this.src.stop(); } catch (e) { /* déjà arrêté */ } this.src = null; }
-};
-/* Répartit la durée audio entre les mots, d’après les phonèmes (ou les lettres en repli). */
-function wordTimes(ch, phonemes, dur) {
-  const words = [];
-  for (let i = ch.a; i <= ch.b; i++) if (R.isWord[i]) words.push(i);
-  if (!words.length) return [[ch.a, 0]];
-  let weights = null;
-  if (Array.isArray(phonemes) && phonemes.length) {
-    const groups = [];
-    let cur = 0;
-    for (const p of phonemes) {
-      if (p === ' ') { if (cur) groups.push(cur); cur = 0; }
-      else if (/[,;:]/.test(p)) cur += 3;
-      else if (/[.!?…]/.test(p)) cur += 4;
-      else if (!/[ˈˌ̃ːˑ]/.test(p)) cur += 1;
-    }
-    if (cur) groups.push(cur);
-    if (groups.length === words.length) weights = groups;
-  }
-  if (!weights) weights = words.map(i => { const t = R.text[i]; return Math.max(1, (t.match(/[\p{L}\p{N}]/gu) || []).length) + (/[,;:]$/.test(t) ? 3 : 0) + (SENT_END.test(t) ? 4 : 0); });
-  const total = weights.reduce((a, b) => a + b, 0);
-  const lead = Math.min(0.08, dur * 0.05), span = Math.max(0.1, dur - lead - Math.min(0.15, dur * 0.06));
-  const out = [];
-  let acc = 0;
-  words.forEach((w, k) => { out.push([w, lead + span * acc / total]); acc += weights[k]; });
-  return out;
-}
-
 /* ----- Découpage du texte en segments de lecture et rythme ----- */
-function currentEngine() { return (S.engine === 'piper' && piper.ok()) ? piper : systemEngine; }
 function chunkMode() {
-  const nat = currentEngine().natural;
+  const nat = systemEngine.natural;
   const r = S.mpm / nat;
   return r >= 0.78 ? 'sentence' : r >= 0.5 ? 'clause' : 'group';
 }
@@ -2775,46 +2615,14 @@ const NO_SYSTEM_VOICE = () => synth
   : 'Ce navigateur ne propose pas de voix de synthèse.';
 /** Renvoie { eng, msg } : le moteur utilisable, ou un message expliquant précisément pourquoi aucun ne l’est. */
 async function ensureEngine() {
-  const fallback = why => systemEngine.ok() ? { eng: systemEngine, msg: why ? why + ' Voix de l’appareil utilisée.' : '' } : { eng: null, msg: (why ? why + ' ' : '') + NO_SYSTEM_VOICE() };
-  if (S.engine !== 'piper') return fallback('');
-  if (piper.ready && piper.key === S.piperVoice) return { eng: piper, msg: '' };
-  if (!piper.available) return fallback('La voix naturelle n’est disponible qu’en ouvrant Lecture+ depuis son adresse web.');
-  const cached = await piper.isCached(S.piperVoice);
-  if (!cached) {
-    const ok = await askVoiceDownload();
-    if (!ok) { S.engine = 'system'; saveSettings(); syncSettingsUI(); return fallback(''); }
-  }
-  try { await piper.load(S.piperVoice); return { eng: piper, msg: '' }; }
-  catch (e) {
-    if (e.message === 'annulé') return fallback('Téléchargement de la voix annulé.');
-    const offline = navigator.onLine === false;
-    return fallback(offline ? 'La voix naturelle n’a pas pu être téléchargée : appareil hors connexion.' : 'La voix naturelle n’a pas pu être téléchargée (réseau filtré ou site de la voix injoignable).');
-  }
-}
-function askVoiceDownload() {
-  return new Promise(resolve => {
-    const v = PIPER_VOICES[S.piperVoice] || PIPER_VOICES['siwis-medium'];
-    $('#voiceDlSize').textContent = `${v.mb + ENGINE_MB} Mo`;
-    const src = $('#voiceDlSource');
-    src.textContent = 'Le modèle de voix est téléchargé depuis Hugging Face (États-Unis), qui voit l’adresse IP de l’appareil.';
-    fetch(piperUrls(S.piperVoice).modelUrls[0], { method: 'HEAD', cache: 'no-store' })
-      .then(r => { if (r.ok && !/text\/html/i.test(r.headers.get('content-type') || '')) src.textContent = 'Le modèle de voix est téléchargé depuis le site de Lecture+ : aucun service extérieur n’est contacté.'; })
-      .catch(() => {});
-    const d = el.dlgVoice;
-    let answered = false;
-    const yes = () => { answered = true; d.close(); resolve(true); };
-    const no = () => { answered = true; d.close(); resolve(false); };
-    $('#btnVoiceYes').onclick = yes; $('#btnVoiceNo').onclick = no;
-    d.addEventListener('close', () => { if (!answered) resolve(false); }, { once: true });
-    try { d.showModal(); } catch (e) { d.setAttribute('open', ''); }
-  });
+  if (systemEngine.ok()) return { eng: systemEngine, msg: '' };
+  return { eng: null, msg: NO_SYSTEM_VOICE() };
 }
 async function voiceStart(fromTok) {
   const gen = ++tts.gen;
-  systemEngine.stop(); piper.stop();
+  systemEngine.stop();
   clearTimeout(tts.waitT);
-  if (S.engine === 'piper') piper.unlock();
-  let eng = (S.engine === 'piper' && piper.ready && piper.key === S.piperVoice) ? piper : (S.engine === 'system' ? systemEngine : null);
+  let eng = systemEngine.ok() ? systemEngine : null;
   if (!eng) {
     const r = await ensureEngine();
     if (gen !== tts.gen) return;
@@ -2828,7 +2636,6 @@ async function voiceStart(fromTok) {
   for (let i = 0; i < chunks.length; i++) {
     if (gen !== tts.gen || !playing) return;
     const ch = chunkText(chunks[i]);
-    if (eng === piper) for (let k = 1; k <= 2 && chunks[i + k]; k++) piper.synth(chunkText(chunks[i + k]), param).catch(() => {});
     setCurrent(ch.a);
     const t0 = performance.now();
     try { await eng.speak(ch, k => { if (gen === tts.gen) setCurrent(k); }, param, gen); }
@@ -2841,7 +2648,7 @@ async function voiceStart(fromTok) {
   }
   if (gen === tts.gen && playing) { stopPlayback(); toast('Fin du texte'); }
 }
-function voiceStop() { tts.gen++; clearTimeout(tts.waitT); clearTimeout(tts.restartT); systemEngine.stop(); piper.stop(); }
+function voiceStop() { tts.gen++; clearTimeout(tts.waitT); clearTimeout(tts.restartT); systemEngine.stop(); }
 function restartVoiceSoon() {
   clearTimeout(tts.restartT);
   tts.restartT = setTimeout(() => { if (playing && S.mode === 'voice') voiceStart(tts.cur >= 0 ? tts.cur : readingToken()); }, 400);
@@ -3214,24 +3021,8 @@ function renderVoiceInfo() {
   const info = $('#voiceInfo');
   if (!synth) { info.textContent = 'Ce navigateur ne propose pas de voix de synthèse.'; return; }
   if (!tts.voices.length) { info.textContent = 'Aucune voix française installée. ' + platformTip(); return; }
-  if (!tts.voice) { info.textContent = 'Seules des voix en ligne sont disponibles : autorisez-les ci-dessus, ou utilisez la voix naturelle Lecture+.'; return; }
+  if (!tts.voice) { info.textContent = 'Seules des voix en ligne sont disponibles : autorisez-les ci-dessus, ou installez une voix française sur l’appareil.'; return; }
   info.textContent = `Voix utilisée : ${tts.voice.name} (${TIER_LABEL[voiceTier(tts.voice)]}). ${platformTip()}`;
-}
-async function renderPiper() {
-  const sel = $('#setPiperVoice');
-  if (!sel.options.length) for (const [k, v] of Object.entries(PIPER_VOICES)) sel.appendChild(new Option(`${v.label} · ${v.mb} Mo`, k));
-  sel.value = S.piperVoice;
-  const info = $('#piperInfo'), btnL = $('#btnPiperLoad'), btnF = $('#btnPiperForget');
-  if (!piper.available) {
-    info.textContent = 'Disponible quand Lecture+ est ouvert depuis son adresse web (par exemple tom-rougeaud.github.io/lecture). En fichier local, utilisez la voix de l’appareil.';
-    btnL.disabled = btnF.disabled = sel.disabled = true;
-    $('input[name="engine"][value="piper"]').disabled = true;
-    return;
-  }
-  const cached = piper.ready && piper.key === S.piperVoice ? true : await piper.isCached(S.piperVoice);
-  const credit = PIPER_VOICES[S.piperVoice].credit ? ` Voix : ${PIPER_VOICES[S.piperVoice].credit}.` : '';
-  info.textContent = (cached ? 'Voix téléchargée : elle fonctionne hors ligne sur cet appareil.' : `Pas encore téléchargée (≈ ${PIPER_VOICES[S.piperVoice].mb + ENGINE_MB} Mo, une seule fois). Le texte lu n’est jamais envoyé.`) + credit;
-  btnL.hidden = cached; btnF.hidden = !cached;
 }
 function syncSettingsUI() {
   for (const [id, [key, fmt]] of Object.entries(RANGES)) {
@@ -3246,9 +3037,6 @@ function syncSettingsUI() {
   el.sizeRange.value = String(S.size); paintRange(el.sizeRange);
   $('#setHl').value = S.hl;
   $('#setOnline').checked = S.allowOnline;
-  $$('input[name="engine"]').forEach(r => { r.checked = r.value === S.engine; });
-  $('#piperBox').hidden = S.engine !== 'piper';
-  $('#systemBox').hidden = S.engine !== 'system';
   el.btnVoice.setAttribute('aria-pressed', String(S.mode === 'voice'));
   el.btnMask.setAttribute('aria-pressed', String(S.mask));
   applyTheme();
@@ -3284,18 +3072,6 @@ $('#setHl').addEventListener('change', e => {
   S.hl = e.target.value; saveSettings();
   if (tts.cur >= 0) { const c = tts.cur, s0 = tts.sent; clearHighlights(); tts.cur = -1; tts.sent = -1; if (s0 >= 0) highlightSentence(s0); setCurrent(c); }
 });
-$$('input[name="engine"]').forEach(r => r.addEventListener('change', () => {
-  if (!r.checked) return;
-  S.engine = r.value; saveSettings(); syncSettingsUI(); renderPiper();
-  if (playing && S.mode === 'voice') restartVoiceSoon();
-}));
-$('#setPiperVoice').addEventListener('change', e => { S.piperVoice = e.target.value; saveSettings(); renderPiper(); if (playing && S.mode === 'voice') { stopPlayback(); } });
-$('#btnPiperLoad').addEventListener('click', async () => {
-  try { await piper.load(S.piperVoice); toast('Voix naturelle prête.'); }
-  catch (e) { if (e.message !== 'annulé') toast('Téléchargement impossible : ' + e.message, 5000); }
-  renderPiper();
-});
-$('#btnPiperForget').addEventListener('click', async () => { await piper.forget(S.piperVoice); toast('Voix supprimée du cache.'); renderPiper(); });
 $('#setVoice').addEventListener('change', e => { S.voiceURI = e.target.value; pickVoice(); renderVoiceInfo(); saveSettings(); if (playing && S.mode === 'voice') restartVoiceSoon(); });
 $('#setOnline').addEventListener('change', e => {
   S.allowOnline = e.target.checked; pickVoice(); renderVoiceSelect(); saveSettings();
@@ -3304,26 +3080,12 @@ $('#setOnline').addEventListener('change', e => {
 $('#btnTestVoice').addEventListener('click', async () => {
   if (playing) stopPlayback();
   const sample = { a: 0, b: 0, words: 14, text: 'Bonjour ! Je suis la voix de Lecture plus. Je lis à ' + Math.round(S.mpm) + ' mots par minute.', offs: [0] };
-  if (S.engine === 'piper') {
-    piper.unlock();
-    const eng = await ensureEngine();
-    if (eng === piper) {
-      const gen = ++tts.gen;
-      try {
-        const res = await piper.call({ type: 'synth', text: sample.text, lengthScale: piper.param(), speaker: (PIPER_VOICES[S.piperVoice] || {}).speaker || 0 });
-        const buf = piper.ctx.createBuffer(1, res.pcm.length, res.sr); buf.getChannelData(0).set(res.pcm);
-        const src = piper.ctx.createBufferSource(); src.buffer = buf; src.connect(piper.ctx.destination); piper.src = src; src.start();
-      } catch (e) { if (gen === tts.gen) toast('Voix indisponible : ' + e.message); }
-      renderPiper();
-      return;
-    }
-  }
   if (!synth || !tts.voice) { renderVoiceInfo(); toast('Aucune voix de l’appareil utilisable.'); return; }
   try { synth.cancel(); const u = new SpeechSynthesisUtterance(sample.text); u.voice = tts.voice; u.lang = tts.voice.lang; u.rate = systemEngine.param(); synth.speak(u); }
   catch (e) { toast('Impossible de tester la voix.'); }
 });
 $('#btnResetSettings').addEventListener('click', () => {
-  const keep = { engine: S.engine, piperVoice: S.piperVoice, voiceURI: S.voiceURI, allowOnline: S.allowOnline };
+  const keep = { voiceURI: S.voiceURI, allowOnline: S.allowOnline };
   changeTypography(() => { S = sanitizeSettings(keep); });
   applyTheme(); positionGuides(); updateSpeedUI(); saveSettings(); syncSettingsUI();
   toast('Réglages par défaut rétablis.');
@@ -3388,7 +3150,6 @@ async function wipeAll() {
   await lib.clear();
   try { await caches.delete('lectureplus-voix-v1'); } catch (e) { /* ignoré */ }
   try { if (window.indexedDB) indexedDB.deleteDatabase('lectureplus_v1'); } catch (e) { /* ignoré */ }
-  if (piper.worker) { piper.worker.terminate(); piper.worker = null; piper.ready = false; piper.key = ''; }
   S = sanitizeSettings(null);
   applyTheme(); applyTypography(); pickVoice(); renderVoiceSelect(); syncSettingsUI(); updateSpeedUI();
   R.meta = null; el.canvas.replaceChildren();
@@ -3415,7 +3176,7 @@ function openDialog(d) {
 /* Le panneau Réglages ne bloque pas la page : la lecture continue et chaque changement est visible aussitôt.
    La zone de lecture se décale pour rester entièrement visible à côté (ou au-dessus sur mobile). */
 function openSettings() {
-  buildFontSelect(); syncSettingsUI(); renderVoiceSelect(); renderPiper();
+  buildFontSelect(); syncSettingsUI(); renderVoiceSelect();
   const d = el.dlgSettings;
   if (d.open) { d.close(); return; }
   try { d.show(); } catch (e) { d.setAttribute('open', ''); }
@@ -3441,7 +3202,7 @@ $('#btnSettings').addEventListener('click', openSettings);
 $('#btnAbout').addEventListener('click', () => openDialog(el.dlgAbout));
 $('#btnPrivacy').addEventListener('click', () => openDialog(el.dlgPrivacy));
 $('#brand').addEventListener('click', e => { if (document.body.dataset.view === 'reader') { e.preventDefault(); stopAndHome(); } });
-el.btnPlay.addEventListener('click', () => { if (S.mode === 'voice' && S.engine === 'piper') piper.unlock(); togglePlay(); });
+el.btnPlay.addEventListener('click', () => { togglePlay(); });
 $('#btnStop').addEventListener('click', stopAndHome);
 $('#btnBack').addEventListener('click', () => jump(-10));
 $('#btnFwd').addEventListener('click', () => jump(10));
@@ -3515,7 +3276,7 @@ document.addEventListener('keydown', e => {
   const tg = e.target, tag = tg && tg.tagName;
   const inField = tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA' || (tg && tg.isContentEditable);
   const k = e.key;
-  if (k === ' ' || k === 'Spacebar') { if (inField || tag === 'BUTTON' || tag === 'A') return; e.preventDefault(); if (S.mode === 'voice' && S.engine === 'piper') piper.unlock(); togglePlay(); return; }
+  if (k === ' ' || k === 'Spacebar') { if (inField || tag === 'BUTTON' || tag === 'A') return; e.preventDefault(); togglePlay(); return; }
   if (k === 'Escape') { e.preventDefault(); stopAndHome(); return; }
   if (inField) return;
   if (k === '+' || e.code === 'NumpadAdd' || (e.shiftKey && k === '=')) { e.preventDefault(); setSize(S.size + 0.1); return; }
@@ -3553,6 +3314,78 @@ async function migrateV1() {
     if (d && typeof d.html === 'string') { const frag = sanitize(d.html); await addToLibrary(d.name || 'Document', frag, 'texte', ''); }
   } catch (e) { /* rien à migrer */ }
 }
+/* ------------------------------------------------------------------------
+   21. Installation de l’appli (fenêtre d’installation) et mise à jour
+   ------------------------------------------------------------------------ */
+const inst = { deferred: null, shown: false, tries: 0, touched: false };
+const DAY_MS = 86400000;
+function isStandalone() {
+  try { return (window.matchMedia && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches)) || navigator.standalone === true; }
+  catch (e) { return false; }
+}
+function isIos() { const ua = navigator.userAgent; return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1); }
+function instState() { const s = store.get('install'); return (s && typeof s === 'object') ? s : {}; }
+function instSave(patch) { store.set('install', Object.assign(instState(), patch)); }
+function renderInstallButtons() { const b = $('#btnInstallOpen'); if (b) b.hidden = isStandalone() || !/^https?:$/.test(location.protocol); }
+function openInstall(auto) {
+  if (isStandalone()) return;
+  const canPrompt = !!inst.deferred, ios = isIos();
+  $('#btnInstallYes').hidden = !canPrompt;
+  $('#installIos').hidden = canPrompt || !ios;
+  $('#installOther').hidden = canPrompt || ios;
+  $('#btnInstallNever').hidden = !auto;
+  el.dlgInstall.dataset.auto = auto ? '1' : '';
+  openDialog(el.dlgInstall);
+}
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); inst.deferred = e; renderInstallButtons(); });
+window.addEventListener('appinstalled', () => { inst.deferred = null; instSave({ installed: true }); renderInstallButtons(); toast('Lecture+ est installée sur votre appareil.', 4000); });
+['pointerdown', 'keydown'].forEach(ev => window.addEventListener(ev, () => { inst.touched = true; }, { once: true, capture: true }));
+$('#btnInstallYes').addEventListener('click', async () => {
+  const p = inst.deferred;
+  el.dlgInstall.close();
+  if (!p) return;
+  try {
+    p.prompt();
+    const r = await p.userChoice;
+    if (!r || r.outcome !== 'accepted') instSave({ until: Date.now() + 7 * DAY_MS });
+  } catch (e) { /* ignoré */ }
+  inst.deferred = null;
+});
+$('#btnInstallLater').addEventListener('click', () => { el.dlgInstall.close(); });
+$('#btnInstallNever').addEventListener('click', () => { instSave({ never: true }); el.dlgInstall.close(); toast('Compris. Vous pourrez toujours installer l’appli depuis Aide.', 4500); });
+el.dlgInstall.addEventListener('close', () => { if (el.dlgInstall.dataset.auto === '1' && !instState().never) instSave({ until: Date.now() + 7 * DAY_MS }); el.dlgInstall.dataset.auto = ''; });
+$('#btnInstallOpen').addEventListener('click', () => { el.dlgAbout.close(); openInstall(false); });
+/* Proposition automatique : une seule fois par visite, jamais pendant une lecture ni quand une fenêtre est ouverte. */
+function autoInstallTick() {
+  inst.tries++;
+  const st = instState();
+  if (isStandalone() || st.never || st.installed || (st.until && st.until > Date.now()) || inst.shown) return;
+  const calm = inst.touched && document.body.dataset.view === 'home' && !playing && !document.querySelector('dialog[open]');
+  if (calm && (inst.deferred || isIos())) { inst.shown = true; openInstall(true); return; }
+  if (inst.tries < 60) setTimeout(autoInstallTick, 10000);
+}
+function showUpdateBanner() {
+  if ($('#updBanner')) return;
+  const b = document.createElement('div');
+  b.id = 'updBanner'; b.className = 'upd'; b.setAttribute('role', 'status');
+  const t = document.createElement('span'); t.textContent = 'Une nouvelle version de Lecture+ est disponible.';
+  const go = document.createElement('button'); go.type = 'button'; go.className = 'btn sm primary'; go.textContent = 'Actualiser';
+  go.addEventListener('click', () => { stopPlayback(true); location.reload(); });
+  const no = document.createElement('button'); no.type = 'button'; no.className = 'btn sm ghost'; no.textContent = 'Plus tard';
+  no.addEventListener('click', () => b.remove());
+  b.append(t, go, no);
+  document.body.append(b);
+}
+function registerWorker() {
+  if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
+  navigator.serviceWorker.register('sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const nw = reg.installing;
+      if (nw) nw.addEventListener('statechange', () => { if (nw.state === 'installed' && navigator.serviceWorker.controller) showUpdateBanner(); });
+    });
+  }).catch(() => { /* hors ligne indisponible */ });
+}
+
 async function init() {
   applyTheme();
   applyTypography();
@@ -3565,11 +3398,14 @@ async function init() {
   setPlayUI();
   $('#appVersion').textContent = APP.version;
   await migrateV1();
-  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(() => { /* hors ligne indisponible */ });
+  registerWorker();
+  renderInstallButtons();
+  setTimeout(autoInstallTick, 20000);
+  try { if (window.caches) caches.delete('lectureplus-voix-v1'); } catch (e) { /* ancienne voix : nettoyage */ }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (document.body.dataset.view === 'reader') scheduleLayout(); }).catch(() => {});
   if (!lsOK) toast('Stockage local indisponible : vos réglages ne seront pas conservés après fermeture.', 5000);
   await route();
-  window.__lecturePlus = { R, settings: () => S, tts, piper, lib, chrome, prompter, readingToken, version: APP.version };
+  window.__lecturePlus = { R, settings: () => S, tts, lib, chrome, prompter, readingToken, version: APP.version };
 }
 init();
 })();

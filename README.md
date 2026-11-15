@@ -1,6 +1,6 @@
 # 📖 Lecture+
 
-**Le prompteur de lecture accessible, avec voix off naturelle et guide de fluence, pour la classe et la maison.**
+**Le prompteur de lecture accessible, avec voix off et guide de fluence, pour la classe et la maison.**
 
 🌐 **Application en ligne : https://tom-rougeaud.github.io/lecture/**
 
@@ -18,7 +18,7 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 |---|---|
 | 🎚️ **Vitesse par niveau** | Curseur gradué du CP (50 MPM) au lycée (160 MPM), avec un réglage fin entre les paliers. |
 | ⏱️ **Rythme exact** | Chaque ligne défile exactement au rythme demandé (écart mesuré : ±2 %). Option « rythme naturel » : respirations aux points et aux virgules. |
-| 🗣️ **Voix naturelle** | Voix neuronale française calculée **sur l’appareil**. Le texte n’est jamais envoyé. |
+| 🗣️ **Voix off** | Lecture à voix haute avec les voix françaises de l’appareil, mot et phrase surlignés. |
 | 🖍️ **Karaoké** | Le mot et la phrase en cours sont surlignés. Le texte reste sur la ligne de lecture. |
 | 🔍 **Masque de lecture** | Ruban de 1 à 5 lignes, avec flou « verre dépoli » autour. Des repères aux bords de l’écran encadrent la ligne lue. |
 | 🔤 **Polices DYS et scolaires** | 12 polices au choix, dont OpenDyslexic, Lexend, Andika, Atkinson Hyperlegible et les cursives Playwrite FR. Tous les accents sont gérés. |
@@ -28,6 +28,7 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 | 🚀 **Gros livres** | Un livre de 400 000 mots s’ouvre en moins d’une seconde et défile à 60 images par seconde. |
 | ⚙️ **Réglages en direct** | Thème, police, taille et masque se changent pendant le défilement, sans l’interrompre. |
 | 📴 **Hors connexion** | Après une première visite, l’application s’ouvre sans réseau. |
+| 📲 **Installable** | S’installe sur l’écran d’accueil et s’ouvre en plein écran, comme une appli. |
 | 🔒 **Zéro traceur** | Aucun cookie, aucune statistique, aucun CDN, aucune police Google. |
 
 ---
@@ -37,7 +38,7 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 1. Ouvrir **https://tom-rougeaud.github.io/lecture/** sur un ordinateur, une tablette ou un téléphone.
 2. Cliquer sur **Importer le texte**, puis déposer un fichier ou coller un texte. Valider ensuite le titre et l’auteur.
 3. Choisir le **niveau** sur le curseur de vitesse et appuyer sur ▶️.
-4. Pour la voix off, utiliser le bouton 🗣️ **Voix**. La voix naturelle est téléchargée une seule fois, avec votre accord.
+4. Pour la voix off, utiliser le bouton 🗣️ **Voix**. La voix de l’appareil est utilisée.
 
 💡 On peut aussi essayer avec le **texte de démonstration** (*Le Lièvre et la Tortue*, La Fontaine).
 
@@ -66,11 +67,9 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 - **Guide de fluence :** repères par niveau et conseils d’entraînement.
 
 ### 🗣️ Voix off
-- **Voix naturelle Lecture+ :** voix neuronales [Piper](https://github.com/rhasspy/piper) calculées dans le navigateur.
-  - Voix proposées : Siwis, Pierre et Jessica.
-  - Une fois téléchargées, elles fonctionnent hors ligne.
-- **Voix de l’appareil :** proposées en solution de repli. Le débit et les pauses sont ajustés pour respecter le rythme choisi, même très lent.
+- **Voix de l’appareil :** Lecture+ utilise les voix françaises installées sur l’ordinateur, la tablette ou le téléphone. Le débit et les pauses sont ajustés pour respecter le rythme choisi, même très lent.
 - **Surlignage karaoké :** le mot et/ou la phrase en cours sont surlignés et synchronisés, même au fond d’un très gros livre.
+- **Pas de voix française ?** L’aide de l’application indique comment en installer une (Windows, Mac, iPhone, iPad, Android).
 
 ### 👁️ Confort de lecture
 - **Masque de lecture :** ruban de 1 à 5 lignes, avec flou et voile réglables autour.
@@ -100,11 +99,10 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 - ✅ **Aucun compte, cookie, traceur ou statistique.** Les polices et les bibliothèques sont intégrées au fichier.
 - ✅ **Données conservées uniquement dans le navigateur utilisé :**
   - réglages : `lectureplus.v2.settings` ;
-  - bibliothèque : IndexedDB `lectureplus_v2` ;
-  - voix téléchargées : cache `lectureplus-voix-v1`.
+  - bibliothèque : IndexedDB `lectureplus_v2`.
 - ⚠️ **Rien ne suit l’utilisateur** sur un autre navigateur ou un autre appareil. Pour transférer sa bibliothèque, utiliser **Exporter / Importer**.
 - 🗑️ Le bouton **Tout effacer** supprime toutes les données.
-- 🛡️ **Connexions limitées :** une politique de sécurité (CSP) restreint les connexions au site lui-même. Seule exception : le téléchargement de la voix naturelle depuis Hugging Face, si elle n’est pas hébergée sur le site.
+- 🛡️ **Connexions limitées :** une politique de sécurité (CSP) restreint les connexions au site lui-même : aucun service extérieur n’est contacté.
 - 🔇 **Voix « en ligne » désactivées par défaut :** celles d’Edge et de Chrome transmettent le texte à Microsoft ou Google.
 - ℹ️ **Hébergement :** comme tout hébergeur, GitHub Pages (GitHub Inc., États-Unis) peut journaliser l’adresse IP des visiteurs. Ouvert depuis un fichier local, Lecture+ ne se connecte à rien.
 
@@ -117,31 +115,25 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 ```
 index.html              l’application complète (fichier autonome, ~3,4 Mo)
 sw.js                   service worker : ouverture hors connexion
-voix/                   moteur de la voix naturelle (chargé seulement si on l’utilise)
-  modeles/                (facultatif) voix hébergées sur le site
-  piper-worker.js         calcul de la voix (Web Worker)
-  ort.wasm.min.js, ort-wasm-simd-threaded.mjs/.wasm   ONNX Runtime Web
-  piper_phonemize.js/.wasm/.data                      phonétisation (espeak-ng, français)
-  LICENCES.txt            licences des composants
-.github/workflows/      robot « Héberger les voix naturelles sur le site »
+manifest.json           fiche d’installation (nom, couleurs, icônes)
+icons/                  icônes de l’application (192, 512, maskable, iPhone)
+confidentialite.html    politique de confidentialité (page publique)
 README.md
 ```
 
-💾 `index.html` fonctionne aussi **seul**, ouvert par double-clic, hors ligne. Dans ce cas, la voix de l’appareil remplace la voix naturelle : les navigateurs interdisent son calcul depuis un fichier local.
+💾 `index.html` fonctionne aussi **seul**, ouvert par double-clic, hors ligne (sans installation sur l’écran d’accueil).
 
 ### 🌍 GitHub Pages
 1. Dans *Settings › Pages › Build and deployment*, choisir **Deploy from a branch**, la branche `main` et le dossier `/ (root)`.
 2. L’adresse du site est `https://tom-rougeaud.github.io/lecture/`.
-3. Pour mettre à jour, remplacer `index.html`, ainsi que le dossier `voix/` s’il change.
+3. Pour mettre à jour, remplacer les fichiers du dépôt. Une bannière « Nouvelle version disponible » prévient les utilisateurs déjà installés.
 
-### 🎙️ Héberger les voix sur le site (recommandé en milieu scolaire)
-Une fois les voix déposées dans `voix/modeles/`, Lecture+ ne contacte plus **aucun** service extérieur.
+### 📲 Installer sur l’écran d’accueil
+- **Android, Chrome, Edge :** une fenêtre propose « Installer l’appli » ; sinon menu ⋮ › *Installer l’application*.
+- **iPhone, iPad (Safari) :** bouton *Partager* › *Sur l’écran d’accueil* › *Ajouter*.
 
-1. Dans le dépôt, ouvrir l’onglet **Actions**, puis **Héberger les voix naturelles sur le site** › **Run workflow**.
-2. Choisir `siwis-medium` (≈ 64 Mo) ou `toutes` (≈ 170 Mo), puis cliquer sur **Run workflow**.
-3. Le robot ajoute les modèles en 2 à 3 minutes, puis GitHub Pages republie le site.
-
-*Les fichiers dépassent 25 Mo : c’est pourquoi ils passent par ce robot plutôt que par « Upload files ».*
+### 🏪 Google Play
+L’application peut être emballée en *Trusted Web Activity* (PWABuilder ou Bubblewrap). La page publique de confidentialité à indiquer dans la fiche est `https://tom-rougeaud.github.io/lecture/confidentialite.html`.
 
 ---
 
@@ -160,10 +152,6 @@ Valeurs en mots correctement lus par minute. Ce sont des **objectifs d’entraî
 
 - **Lecture+** © Tom Rougeaud, sous licence [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.fr) : partage et adaptation libres, sans usage commercial.
 - **Bibliothèques intégrées :** pdf.js (Apache 2.0), JSZip (MIT), mammoth.js (BSD-2), marked (MIT).
-- **Voix :**
-  - moteurs : ONNX Runtime Web (MIT), piper-phonemize / piper-wasm (MIT) ;
-  - espeak-ng (GPL-3.0), fourni en fichiers séparés dans `voix/` ; sources : https://github.com/rhasspy/espeak-ng ;
-  - modèles Piper : Siwis (Université d’Édimbourg, CC BY 4.0), UPMC Pierre et Jessica (CC BY-SA 4.0).
 - **Polices (SIL Open Font License 1.1) :** Inter, Literata, Lexend, Andika, Atkinson Hyperlegible, OpenDyslexic, Playwrite FR et JetBrains Mono.
 - **Texte d’essai :** *Le Lièvre et la Tortue*, Jean de La Fontaine (domaine public).
 
