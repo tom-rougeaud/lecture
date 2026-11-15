@@ -1,10 +1,10 @@
 # 📖 Lecture+
 
-**Le prompteur de lecture accessible, avec voix off et guide de fluence, pour la classe et la maison.**
+**Le prompteur de lecture accessible, avec guide de fluence, pour la classe et la maison.**
 
 🌐 **Application en ligne : https://tom-rougeaud.github.io/lecture/**
 
-Lecture+ fait défiler un texte à une vitesse réglée en **mots par minute (MPM)**, ou le lit à voix haute en **surlignant chaque mot**. L’affichage s’adapte à chaque lecteur : polices scolaires et DYS, espacements, masque de lecture, thèmes et contraste.
+Lecture+ fait défiler un texte à une vitesse réglée en **mots par minute (MPM)**. L’affichage s’adapte à chaque lecteur : polices scolaires et DYS, espacements, masque de lecture, thèmes et contraste.
 
 Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données, et l’application marche même hors connexion.
 
@@ -18,8 +18,6 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 |---|---|
 | 🎚️ **Vitesse par niveau** | Curseur gradué du CP (50 MPM) au lycée (160 MPM), avec un réglage fin entre les paliers. |
 | ⏱️ **Rythme exact** | Chaque ligne défile exactement au rythme demandé (écart mesuré : ±2 %). Option « rythme naturel » : respirations aux points et aux virgules. |
-| 🗣️ **Voix off** | Lecture à voix haute avec les voix françaises de l’appareil, mot et phrase surlignés. |
-| 🖍️ **Karaoké** | Le mot et la phrase en cours sont surlignés. Le texte reste sur la ligne de lecture. |
 | 🔍 **Masque de lecture** | Ruban de 1 à 5 lignes, avec flou « verre dépoli » autour. Des repères aux bords de l’écran encadrent la ligne lue. |
 | 🔤 **Polices DYS et scolaires** | 12 polices au choix, dont OpenDyslexic, Lexend, Andika, Atkinson Hyperlegible et les cursives Playwrite FR. Tous les accents sont gérés. |
 | 🎨 **6 thèmes** | Clair, beige, sépia, sombre, noir et contrasté, avec un curseur de contraste (conformité WCAG AAA). |
@@ -38,7 +36,6 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 1. Ouvrir **https://tom-rougeaud.github.io/lecture/** sur un ordinateur, une tablette ou un téléphone.
 2. Cliquer sur **Importer le texte**, puis déposer un fichier ou coller un texte. Valider ensuite le titre et l’auteur.
 3. Choisir le **niveau** sur le curseur de vitesse et appuyer sur ▶️.
-4. Pour la voix off, utiliser le bouton 🗣️ **Voix**. La voix de l’appareil est utilisée.
 
 💡 On peut aussi essayer avec le **texte de démonstration** (*Le Lièvre et la Tortue*, La Fontaine).
 
@@ -66,11 +63,6 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 - **Images :** une image n’immobilise jamais la lecture. Son passage est limité à une durée réglable (1,5 s par défaut).
 - **Guide de fluence :** repères par niveau et conseils d’entraînement.
 
-### 🗣️ Voix off
-- **Voix de l’appareil :** Lecture+ utilise les voix françaises installées sur l’ordinateur, la tablette ou le téléphone. Le débit et les pauses sont ajustés pour respecter le rythme choisi, même très lent.
-- **Surlignage karaoké :** le mot et/ou la phrase en cours sont surlignés et synchronisés, même au fond d’un très gros livre.
-- **Pas de voix française ?** L’aide de l’application indique comment en installer une (Windows, Mac, iPhone, iPad, Android).
-
 ### 👁️ Confort de lecture
 - **Masque de lecture :** ruban de 1 à 5 lignes, avec flou et voile réglables autour.
 - **Repères de ligne :** fixés aux bords de l’écran, quel que soit l’appareil.
@@ -89,7 +81,7 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 | `Page ↑` `Page ↓` | Niveau précédent / suivant |
 | `←` `→` | Reculer / avancer de 10 s |
 | `Maj` + `+` / `−` | Taille du texte |
-| `V` / `M` / `F` | Voix / masque / plein écran |
+| `M` / `F` | Masque / plein écran |
 | `Échap` | Arrêter et revenir à l’accueil |
 
 ---
@@ -103,7 +95,6 @@ Tout fonctionne **sur l’appareil** : aucun compte, aucune collecte de données
 - ⚠️ **Rien ne suit l’utilisateur** sur un autre navigateur ou un autre appareil. Pour transférer sa bibliothèque, utiliser **Exporter / Importer**.
 - 🗑️ Le bouton **Tout effacer** supprime toutes les données.
 - 🛡️ **Connexions limitées :** une politique de sécurité (CSP) restreint les connexions au site lui-même : aucun service extérieur n’est contacté.
-- 🔇 **Voix « en ligne » désactivées par défaut :** celles d’Edge et de Chrome transmettent le texte à Microsoft ou Google.
 - ℹ️ **Hébergement :** comme tout hébergeur, GitHub Pages (GitHub Inc., États-Unis) peut journaliser l’adresse IP des visiteurs. Ouvert depuis un fichier local, Lecture+ ne se connecte à rien.
 
 ---

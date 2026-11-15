@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Lecture+">
-<meta name="description" content="Lecture+ : prompteur de lecture accessible, voix off naturelle avec surlignage, guide de fluence et bibliothèque personnelle. Fonctionne sur l’appareil, sans collecte de données.">
+<meta name="description" content="Lecture+ : prompteur de lecture accessible, guide de fluence et bibliothèque personnelle. Fonctionne sur l’appareil, sans collecte de données.">
 <meta name="author" content="Tom Rougeaud">
 <title>Lecture+</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2064%2064'%3E%3Crect%20width%3D'64'%20height%3D'64'%20rx%3D'15'%20fill%3D'%239a5b3b'%2F%3E%3Cpath%20d%3D'M12%2021.5c6.5-2.6%2013-2.2%2020%202.4%207-4.6%2013.5-5%2020-2.4v24.5c-6.5-2.6-13-2.2-20%202.4-7-4.6-13.5-5-20-2.4z'%20fill%3D'none'%20stroke%3D'%23fbf8f2'%20stroke-width%3D'3.2'%20stroke-linejoin%3D'round'%2F%3E%3Cpath%20d%3D'M32%2024v24.4'%20stroke%3D'%23fbf8f2'%20stroke-width%3D'3.2'%20stroke-linecap%3D'round'%2F%3E%3Cpath%20d%3D'M47%208.5v8M43%2012.5h8'%20stroke%3D'%23f2d58b'%20stroke-width%3D'3'%20stroke-linecap%3D'round'%2F%3E%3C%2Fsvg%3E">
@@ -528,7 +528,6 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
   <symbol id="i-fwd" viewBox="0 0 24 24"><path d="M20.2 12a8.2 8.2 0 1 1-2.7-6.1"/><path d="M20.2 4.2v4.4h-4.4"/><text x="11.3" y="15.4" font-size="7.2" text-anchor="middle" fill="currentColor" stroke="none" font-weight="700" font-family="system-ui,sans-serif">10</text></symbol>
   <symbol id="i-aminus" viewBox="0 0 24 24"><path d="M3 18.5 7.8 6l4.8 12.5M4.8 14h6"/><path d="M15.5 10h6"/></symbol>
   <symbol id="i-aplus" viewBox="0 0 24 24"><path d="M3 18.5 7.8 6l4.8 12.5M4.8 14h6"/><path d="M15.5 10h6M18.5 7v6"/></symbol>
-  <symbol id="i-voice" viewBox="0 0 24 24"><path d="M4 9.6v4.8h3.3l4.4 3.8V5.8L7.3 9.6z"/><path d="M15.4 9.2a4 4 0 0 1 0 5.6M18 6.7a7.6 7.6 0 0 1 0 10.6"/></symbol>
   <symbol id="i-mask" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9.5h18M3 14.5h18"/></symbol>
   <symbol id="i-full" viewBox="0 0 24 24"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></symbol>
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
@@ -574,9 +573,9 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
   <div class="wrap">
     <div class="hero">
       <div class="hero-text">
-        <p class="eyebrow">Prompteur de lecture · voix off · fluence</p>
+        <p class="eyebrow">Prompteur de lecture · fluence</p>
         <h1 id="homeTitle">Lire à son rythme, sereinement.</h1>
-        <p class="lead">Importez un texte, choisissez un niveau de fluence, et laissez Lecture+ le faire défiler ou le lire à voix haute en surlignant chaque mot.</p>
+        <p class="lead">Importez un texte, choisissez un niveau de fluence, et laissez Lecture+ le faire défiler à la vitesse choisie.</p>
         <div class="hero-actions">
           <a class="btn primary lg" href="#/importer"><svg class="ic" aria-hidden="true"><use href="#i-import"/></svg>Importer le texte</a>
           <button class="btn lg" id="btnDemo" type="button"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg>Essayer avec une fable</button>
@@ -697,7 +696,6 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
       <input type="range" id="sizeRange" min="0.9" max="3.5" step="0.05" value="1.6">
       <span class="a-big" aria-hidden="true">A</span>
     </div>
-    <button class="btn icon" id="btnVoice" type="button" aria-pressed="false" title="Voix off et surlignage (V)"><svg class="ic" aria-hidden="true"><use href="#i-voice"/></svg><span class="sr-only">Voix off avec surlignage</span></button>
     <button class="btn icon" id="btnMask" type="button" aria-pressed="false" title="Masque de lecture (M)"><svg class="ic" aria-hidden="true"><use href="#i-mask"/></svg><span class="sr-only">Masque de lecture guidée</span></button>
     <button class="btn icon" id="btnFull" type="button" title="Plein écran (F)"><svg class="ic" aria-hidden="true"><use href="#i-full"/></svg><span class="sr-only">Plein écran</span></button>
   </div>
@@ -754,16 +752,6 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
       <label class="check"><input type="checkbox" id="setMarks">Repères de la ligne de lecture aux bords de l’écran</label>
     </section>
     <section class="set">
-      <h3>Voix off</h3>
-      <div id="systemBox">
-        <div class="row wide"><label for="setVoice">Voix</label><select id="setVoice"></select></div>
-        <label class="check"><input type="checkbox" id="setOnline">Autoriser les voix « en ligne » (Edge, Chrome) : très naturelles, mais le texte lu est envoyé à Microsoft ou Google</label>
-        <p class="muted small" id="voiceInfo"></p>
-      </div>
-      <div class="row wide"><label for="setHl">Surlignage</label><select id="setHl"><option value="both">Mot et phrase</option><option value="word">Mot seulement</option><option value="sentence">Phrase seulement</option><option value="none">Aucun</option></select></div>
-      <div class="btn-row"><button class="btn sm" type="button" id="btnTestVoice"><svg class="ic" aria-hidden="true"><use href="#i-voice"/></svg>Écouter un exemple</button></div>
-    </section>
-    <section class="set">
       <h3>Mes données</h3>
       <p class="muted small">Réglages et bibliothèque restent dans ce navigateur. La sauvegarde permet de les retrouver ailleurs.</p>
       <div class="btn-row">
@@ -780,7 +768,7 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
 <dialog class="modal" id="dlgFluence" aria-labelledby="hFluence">
   <div class="sheet-head"><h2 id="hFluence">Guide de fluence</h2><button class="btn icon ghost" type="button" data-close title="Fermer"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg><span class="sr-only">Fermer</span></button></div>
   <div class="sheet-body">
-    <p>Choisissez un niveau : la vitesse du défilement et de la voix off se règle sur le repère de fin d’année de ce niveau. Le curseur du dock reprend ces mêmes paliers ; on peut s’arrêter entre deux.</p>
+    <p>Choisissez un niveau : la vitesse du défilement se règle sur le repère de fin d’année de ce niveau. Le curseur du dock reprend ces mêmes paliers ; on peut s’arrêter entre deux.</p>
     <div class="fluence-list" id="fluenceList" role="list"></div>
     <h3>Conversion de la vitesse</h3>
     <p class="formula">MPM = vitesse (px/s) × 60 ÷ hauteur moyenne d’un mot (px)</p>
@@ -799,7 +787,7 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
 <dialog class="modal" id="dlgAbout" aria-labelledby="hAbout">
   <div class="sheet-head"><h2 id="hAbout">Aide et à propos</h2><button class="btn icon ghost" type="button" data-close title="Fermer"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg><span class="sr-only">Fermer</span></button></div>
   <div class="sheet-body">
-    <p><strong>Lecture+</strong> fait défiler un texte à une vitesse réglée en mots par minute, ou le lit à voix haute en surlignant chaque mot. L’affichage s’adapte à chaque lecteur : polices scolaires et DYS, espacements, masque de lecture, thèmes et contraste.</p>
+    <p><strong>Lecture+</strong> fait défiler un texte à une vitesse réglée en mots par minute. L’affichage s’adapte à chaque lecteur : polices scolaires et DYS, espacements, masque de lecture, thèmes et contraste.</p>
     <h3>Pendant la lecture</h3>
     <ul>
       <li>Les menus du haut et du bas s’effacent pour laisser toute la place au texte. Les <strong>Réglages</strong> s’ouvrent sans arrêter la lecture : chaque changement s’applique aussitôt.</li>
@@ -814,7 +802,7 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
       <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Reculer / avancer de 10 secondes (aussi pour parcourir le texte à l’arrêt)</td></tr>
       <tr><td><kbd>Tab</kbd></td><td>Atteindre la zone de texte, puis les commandes</td></tr>
       <tr><td><kbd>Maj</kbd> + <kbd>+</kbd> / <kbd>−</kbd></td><td>Agrandir / réduire le texte (ou curseur « A A » du dock)</td></tr>
-      <tr><td><kbd>V</kbd> · <kbd>M</kbd> · <kbd>F</kbd></td><td>Voix off · masque · plein écran</td></tr>
+      <tr><td><kbd>M</kbd> · <kbd>F</kbd></td><td>Masque · plein écran</td></tr>
       <tr><td><kbd>Échap</kbd></td><td>Arrêter et revenir à l’accueil</td></tr>
     </table>
     <h3>Sur tablette et téléphone</h3>
@@ -828,8 +816,6 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
     <h3>Installer l’appli</h3>
     <p>Lecture+ peut s’installer sur l’écran d’accueil, comme une appli, et s’ouvre alors en plein écran.</p>
     <div class="btn-row"><button class="btn sm" type="button" id="btnInstallOpen" hidden>Installer l’appli</button></div>
-    <h3>Voix off</h3>
-    <p>Si aucune voix n’est proposée : installez une voix française sur l’appareil (Windows : Paramètres › Heure et langue › Voix ; Mac, iPad, iPhone : Accessibilité › Contenu énoncé › Voix ; Android : Paramètres › Accessibilité › Synthèse vocale).</p>
     <h3>À propos</h3>
     <p class="muted small">Version <span id="appVersion"></span> · Conception : Tom Rougeaud · Licence <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a> · <a href="https://tom-rougeaud.github.io/casier/" target="_blank" rel="noopener noreferrer">Autres outils</a></p>
     <p class="muted small">Composants : pdf.js (Apache 2.0), JSZip (MIT), mammoth.js (BSD-2), marked (MIT). Polices Inter, Literata, Lexend, Andika, Atkinson Hyperlegible, OpenDyslexic, Playwrite FR, JetBrains Mono (SIL OFL 1.1).</p>
@@ -850,7 +836,6 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
     <h3>Connexions réseau</h3>
     <ul>
       <li><strong>Hébergement</strong> : en ligne, la page est servie par GitHub Pages (GitHub Inc., États-Unis), qui peut enregistrer l’adresse IP des visiteurs dans ses journaux techniques, comme tout hébergeur. Ouvert depuis un fichier sur l’ordinateur, Lecture+ ne se connecte à rien.</li>
-      <li><strong>Voix « en ligne » de l’appareil</strong> (Edge, Chrome) : désactivées par défaut. Si vous les autorisez, le texte lu est transmis à Microsoft ou Google.</li>
     </ul>
     <p class="muted small">Le cache <code>lectureplus-app</code> conserve uniquement les fichiers de l’application, pour qu’elle s’ouvre hors connexion ; il ne contient aucune donnée personnelle.</p>
     <div class="btn-row">
@@ -901,7 +886,7 @@ dialog.modal.small{width:min(480px,calc(100vw - 24px))}
 </dialog>
 
 <script type="application/json" id="lp-data">
-{"fluence":[{"niveau":"CP","nom":"CP (fin d’année)","cible":50,"role":"Déchiffrage et automatisation des correspondances graphèmes-phonèmes","source":"seuil de fin d’année"},{"niveau":"CE1","nom":"CE1","cible":70,"role":"Restitution rapide, accès au sens","source":"seuil de fin d’année"},{"niveau":"CE2","nom":"CE2","cible":90,"role":"Fluence continue, expressivité et prosodie","source":"seuil de fin d’année"},{"niveau":"CM1","nom":"CM1","cible":110,"role":"Lecture courante, autonomie de compréhension","source":"seuil de fin d’année"},{"niveau":"CM2","nom":"CM2","cible":120,"role":"Consolidation avant le collège","source":"seuil de fin d’année"},{"niveau":"6e","nom":"6e – 5e","cible":130,"role":"Lecture fluide des textes disciplinaires","source":"valeur intermédiaire estimée (pas de repère officiel chiffré)"},{"niveau":"4e","nom":"4e – 3e","cible":140,"role":"Lecture autonome et efficace","source":"seuil « satisfaisant » de l’évaluation nationale de 4e (Éduscol)"},{"niveau":"Lycée","nom":"Lycée / adulte","cible":160,"role":"Lecture à voix haute fluide et expressive","source":"ordre de grandeur d’un bon lecteur à voix haute (la lecture silencieuse est plus rapide : 200 à 250)"}],"fluenceNote":"Repères en mots correctement lus par minute. École : seuils de fin d’année couramment utilisés dans les circonscriptions (CP 50 → CM2 120). 4e : seuil « satisfaisant » de l’évaluation nationale de 4e publiée sur Éduscol (120 à 139 = fragile, 140 et plus = satisfaisant). 6e – 5e : valeur intermédiaire estimée, faute de repère officiel chiffré. Lycée / adulte : 160, rythme confortable d’un bon lecteur à voix haute. Ces valeurs servent à fixer un objectif d’entraînement, pas à évaluer un élève.","demo":{"titre":"Le Lièvre et la Tortue (texte d’essai)","html":"<h1>Bienvenue dans Lecture+<\/h1><p>Voici une fable pour essayer. Appuyez sur le bouton de lecture : le texte défile à la vitesse choisie. Le curseur du bas règle cette vitesse par paliers, du CP au lycée.<\/p><p>Le bouton <strong>haut-parleur<\/strong> active la voix off : chaque mot est surligné pendant la lecture. Le bouton <strong>masque<\/strong> floute tout sauf les lignes en cours.<\/p><h2>Le Lièvre et la Tortue<\/h2><p><em>Jean de La Fontaine, Fables, livre VI, 1668<\/em><\/p><p>Rien ne sert de courir ; il faut partir à point.<br>Le Lièvre et la Tortue en sont un témoignage.<br>« Gageons, dit celle-ci, que vous n’atteindrez point<br>Sitôt que moi ce but. — Sitôt ? Êtes-vous sage ?<br>Repartit l’animal léger.<br>Ma commère, il vous faut purger<br>Avec quatre grains d’ellébore.<br>— Sage ou non, je parie encore. »<br>Ainsi fut fait : et de tous deux<br>On mit près du but les enjeux :<br>Savoir quoi, ce n’est pas l’affaire,<br>Ni de quel juge l’on convint.<\/p><p>Notre Lièvre n’avait que quatre pas à faire ;<br>J’entends de ceux qu’il fait lorsque prêt d’être atteint<br>Il s’éloigne des chiens, les renvoie aux calendes,<br>Et leur fait arpenter les landes.<br>Ayant, dis-je, du temps de reste pour brouter,<br>Pour dormir, et pour écouter<br>D’où vient le vent, il laisse la Tortue<br>Aller son train de sénateur.<br>Elle part, elle s’évertue ;<br>Elle se hâte avec lenteur.<\/p><p>Lui cependant méprise une telle victoire,<br>Tient la gageure à peu de gloire,<br>Croit qu’il y va de son honneur<br>De partir tard. Il broute, il se repose,<br>Il s’amuse à toute autre chose<br>Qu’à la gageure. À la fin quand il vit<br>Que l’autre touchait presque au bout de la carrière,<br>Il partit comme un trait ; mais les élans qu’il fit<br>Furent vains : la Tortue arriva la première.<br>« Eh bien ! lui cria-t-elle, avais-je pas raison ?<br>De quoi vous sert votre vitesse ?<br>Moi l’emporter ! et que serait-ce<br>Si vous portiez une maison ? »<\/p><hr><p><strong>Astuce :<\/strong> pendant la lecture, les menus s’effacent. Touchez ou cliquez le texte pour les faire revenir, ou approchez la souris du haut ou du bas de l’écran.<\/p>"}}
+{"fluence":[{"niveau":"CP","nom":"CP (fin d’année)","cible":50,"role":"Déchiffrage et automatisation des correspondances graphèmes-phonèmes","source":"seuil de fin d’année"},{"niveau":"CE1","nom":"CE1","cible":70,"role":"Restitution rapide, accès au sens","source":"seuil de fin d’année"},{"niveau":"CE2","nom":"CE2","cible":90,"role":"Fluence continue, expressivité et prosodie","source":"seuil de fin d’année"},{"niveau":"CM1","nom":"CM1","cible":110,"role":"Lecture courante, autonomie de compréhension","source":"seuil de fin d’année"},{"niveau":"CM2","nom":"CM2","cible":120,"role":"Consolidation avant le collège","source":"seuil de fin d’année"},{"niveau":"6e","nom":"6e – 5e","cible":130,"role":"Lecture fluide des textes disciplinaires","source":"valeur intermédiaire estimée (pas de repère officiel chiffré)"},{"niveau":"4e","nom":"4e – 3e","cible":140,"role":"Lecture autonome et efficace","source":"seuil « satisfaisant » de l’évaluation nationale de 4e (Éduscol)"},{"niveau":"Lycée","nom":"Lycée / adulte","cible":160,"role":"Lecture à voix haute fluide et expressive","source":"ordre de grandeur d’un bon lecteur à voix haute (la lecture silencieuse est plus rapide : 200 à 250)"}],"fluenceNote":"Repères en mots correctement lus par minute. École : seuils de fin d’année couramment utilisés dans les circonscriptions (CP 50 → CM2 120). 4e : seuil « satisfaisant » de l’évaluation nationale de 4e publiée sur Éduscol (120 à 139 = fragile, 140 et plus = satisfaisant). 6e – 5e : valeur intermédiaire estimée, faute de repère officiel chiffré. Lycée / adulte : 160, rythme confortable d’un bon lecteur à voix haute. Ces valeurs servent à fixer un objectif d’entraînement, pas à évaluer un élève.","demo":{"titre":"Le Lièvre et la Tortue (texte d’essai)","html":"<h1>Bienvenue dans Lecture+<\/h1><p>Voici une fable pour essayer. Appuyez sur le bouton de lecture : le texte défile à la vitesse choisie. Le curseur du bas règle cette vitesse par paliers, du CP au lycée.<\/p><p>Le bouton <strong>masque<\/strong> floute tout sauf les lignes en cours.<\/p><h2>Le Lièvre et la Tortue<\/h2><p><em>Jean de La Fontaine, Fables, livre VI, 1668<\/em><\/p><p>Rien ne sert de courir ; il faut partir à point.<br>Le Lièvre et la Tortue en sont un témoignage.<br>« Gageons, dit celle-ci, que vous n’atteindrez point<br>Sitôt que moi ce but. — Sitôt ? Êtes-vous sage ?<br>Repartit l’animal léger.<br>Ma commère, il vous faut purger<br>Avec quatre grains d’ellébore.<br>— Sage ou non, je parie encore. »<br>Ainsi fut fait : et de tous deux<br>On mit près du but les enjeux :<br>Savoir quoi, ce n’est pas l’affaire,<br>Ni de quel juge l’on convint.<\/p><p>Notre Lièvre n’avait que quatre pas à faire ;<br>J’entends de ceux qu’il fait lorsque prêt d’être atteint<br>Il s’éloigne des chiens, les renvoie aux calendes,<br>Et leur fait arpenter les landes.<br>Ayant, dis-je, du temps de reste pour brouter,<br>Pour dormir, et pour écouter<br>D’où vient le vent, il laisse la Tortue<br>Aller son train de sénateur.<br>Elle part, elle s’évertue ;<br>Elle se hâte avec lenteur.<\/p><p>Lui cependant méprise une telle victoire,<br>Tient la gageure à peu de gloire,<br>Croit qu’il y va de son honneur<br>De partir tard. Il broute, il se repose,<br>Il s’amuse à toute autre chose<br>Qu’à la gageure. À la fin quand il vit<br>Que l’autre touchait presque au bout de la carrière,<br>Il partit comme un trait ; mais les élans qu’il fit<br>Furent vains : la Tortue arriva la première.<br>« Eh bien ! lui cria-t-elle, avais-je pas raison ?<br>De quoi vous sert votre vitesse ?<br>Moi l’emporter ! et que serait-ce<br>Si vous portiez une maison ? »<\/p><hr><p><strong>Astuce :<\/strong> pendant la lecture, les menus s’effacent. Touchez ou cliquez le texte pour les faire revenir, ou approchez la souris du haut ou du bas de l’écran.<\/p>"}}
 </script>
 <script>/* jszip — licence : voir « À propos » */
 /*!
@@ -997,7 +982,7 @@ this.attribute(att));if(0===node.children.length||node.children.every(function(e
 (() => {
 'use strict';
 
-const APP = { name: 'Lecture+', version: '2.3.0', key: 'lectureplus.v2', idb: 'lectureplus_v2' };
+const APP = { name: 'Lecture+', version: '2.4.0', key: 'lectureplus.v2', idb: 'lectureplus_v2' };
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -1064,14 +1049,12 @@ const THEME_BG = { light: '#f7f7f4', beige: '#f4eee3', sepia: '#eadbbf', dark: '
 const DEFAULTS = {
   theme: 'beige', contrast: 50, font: 'lexend', size: 1.6, lh: 1.7, ws: 0.06, ls: 0, width: 64,
   mpm: 110, mode: 'scroll', mask: false, maskLines: 2, maskBlur: 6, maskDim: 0.45, readLine: 0.42,
-  imgTime: 1.5, countdown: 3, pauses: true, marks: true, hl: 'both',
-  voiceURI: '', allowOnline: false
+  imgTime: 1.5, countdown: 3, pauses: true, marks: true
 };
 const SCHEMA = {
   theme: THEMES, contrast: [0, 100], font: Object.keys(FONTS), size: [0.9, 3.5], lh: [1.2, 2.5], ws: [0, 1], ls: [0, 0.3],
-  width: [30, 100], mpm: [20, 300], mode: ['scroll', 'voice'], mask: 'bool', maskLines: [1, 5], maskBlur: [0, 16],
-  maskDim: [0, 0.9], readLine: [0.25, 0.6], imgTime: [0.5, 6], countdown: [0, 5], pauses: 'bool', marks: 'bool', hl: ['word', 'sentence', 'both', 'none'],
-  voiceURI: 'str', allowOnline: 'bool'
+  width: [30, 100], mpm: [20, 300], mode: ['scroll'], mask: 'bool', maskLines: [1, 5], maskBlur: [0, 16],
+  maskDim: [0, 0.9], readLine: [0.25, 0.6], imgTime: [0.5, 6], countdown: [0, 5], pauses: 'bool', marks: 'bool'
 };
 function sanitizeSettings(o) {
   const out = Object.assign({}, DEFAULTS);
@@ -1191,7 +1174,7 @@ const el = {
   dock: $('#dock'), hotTop: $('#hotTop'), hotBottom: $('#hotBottom'),
   maskTop: $('#maskTop'), maskBottom: $('#maskBottom'), maskBand: $('#maskBand'), readMarks: $('#readMarks'),
   btnPlay: $('#btnPlay'), playIcon: $('#playIcon'), speed: $('#speed'), ticks: $('#ticks'), mpmOut: $('#mpmOut'), lvlOut: $('#lvlOut'),
-  btnVoice: $('#btnVoice'), btnMask: $('#btnMask'), sizePop: $('#sizePop'), sizeRange: $('#sizeRange'), btnSize: $('#btnSize'),
+  btnMask: $('#btnMask'), sizePop: $('#sizePop'), sizeRange: $('#sizeRange'), btnSize: $('#btnSize'),
   fileInput: $('#fileInput'), importInput: $('#importInput'),
   dropOverlay: $('#dropOverlay'), busy: $('#busy'), busyText: $('#busyText'), busyBarWrap: $('#busyBarWrap'), busyBar: $('#busyBar'), busyCancel: $('#busyCancel'),
   toast: $('#toast'), countdown: $('#countdown'),
@@ -1897,7 +1880,6 @@ function renderDocument(meta, frag, opts = {}) {
   el.docTitle.textContent = meta.author ? `${meta.name} — ${meta.author}` : meta.name;
   document.title = meta.name + ' — Lecture+';
   prepareTokens();
-  tts.cur = -1; tts.sent = -1;
   if ('IntersectionObserver' in window) {
     R.io = new IntersectionObserver(entries => {
       for (const e of entries) if (e.isIntersecting) ensureTokens(+e.target.dataset.i);
@@ -1938,7 +1920,6 @@ function readingToken() {
 }
 function anchorToken() {
   if (!R.text.length) return -1;
-  if (S.mode === 'voice' && tts.cur >= 0) return tts.cur;
   return readingToken();
 }
 function liveTop(i) {
@@ -1952,7 +1933,7 @@ function scrollToToken(i, smooth) {
   if (smooth) { smoothScrollTo(y); return; }
   el.viewport.scrollTop = Math.max(0, y); syncScrollPos();
   /* les sections qui viennent d’apparaître peuvent changer de hauteur : on recale */
-  requestAnimationFrame(() => { if (!playing || S.mode === 'voice') { el.viewport.scrollTop = Math.max(0, liveTop(i) + R.fontPx * 0.6 - R.readY); syncScrollPos(); } prompter.dirty = true; });
+  requestAnimationFrame(() => { if (!playing) { el.viewport.scrollTop = Math.max(0, liveTop(i) + R.fontPx * 0.6 - R.readY); syncScrollPos(); } prompter.dirty = true; });
 }
 function computeReadY(vh) {
   const top = (el.appbar.offsetHeight || 60) + R.lineH;
@@ -2116,7 +2097,6 @@ function setMpm(m, announce) {
   S.mpm = clamp(Math.round(m), 20, 300);
   updateSpeedUI();
   saveSettings();
-  if (S.mode === 'voice' && playing) restartVoiceSoon();
   if (announce) { const lv = levelOf(S.mpm); toast(`${Math.round(S.mpm)} mots par minute${lv ? ' · ' + lv.name : ''}`, 1600); }
   requestStats();
 }
@@ -2127,7 +2107,6 @@ el.speed.addEventListener('input', () => {
   updateSpeedUI();
   el.speed.value = String(p); paintRange(el.speed);
   saveSettings();
-  if (S.mode === 'voice' && playing) restartVoiceSoon();
   requestStats();
 });
 function stepLevel(dir) {
@@ -2333,12 +2312,11 @@ function fmtTime(min) {
 function readCount() {
   const total = R.totalWords || 0;
   if (!total || document.body.dataset.view !== 'reader') return 0;
-  const voice = S.mode === 'voice' && tts.cur >= 0;
-  const k = voice ? tts.cur + 1 : readingToken();
+  const k = readingToken();
   let read = R.wordPrefix[clamp(k, 0, R.text.length)] || 0;
   const max = maxScroll();
-  if (!voice && max > 0 && el.viewport.scrollTop >= max - 2) read = total;
-  if (el.viewport.scrollTop < 2 && !(voice && tts.cur > 0)) read = 0;
+  if (max > 0 && el.viewport.scrollTop >= max - 2) read = total;
+  if (el.viewport.scrollTop < 2) read = 0;
   return read;
 }
 function updateStats() {
@@ -2397,11 +2375,7 @@ function startPlayback() {
   playing = true;
   setPlayUI();
   lockScreen();
-  if (S.mode === 'voice') {
-    clearTimeout(countdownT); el.countdown.hidden = true;
-    voiceStart(voiceStartToken());
-  } else {
-    clearHighlights(); tts.cur = -1; tts.sent = -1;
+  {
     if (el.viewport.scrollTop >= maxScroll() - 2) el.viewport.scrollTop = 0;
     const go = () => { prompter.last = 0; resyncPrompter(); prompter.raf = requestAnimationFrame(prompterFrame); };
     if (S.countdown > 0 && readingToken() < 4) runCountdown(S.countdown, go); else go();
@@ -2415,7 +2389,6 @@ function stopPlayback(silent) {
   playing = false;
   cancelAnimationFrame(prompter.raf);
   if (prompter.frac) { const y = el.viewport.scrollTop; clearFrac(); el.viewport.scrollTop = y; }
-  voiceStop();
   unlockScreen();
   setPlayUI();
   showChrome();
@@ -2426,242 +2399,14 @@ function togglePlay() { playing ? stopPlayback() : startPlayback(); }
 function stopAndHome() { stopPlayback(); savePosition(); location.hash = '#/'; }
 function jump(sec) {
   if (!R.text.length) return;
-  const base = (S.mode === 'voice' && tts.cur >= 0) ? tts.cur : readingToken();
+  const base = readingToken();
   const words = Math.max(1, Math.round(S.mpm * Math.abs(sec) / 60));
   let k = base, n = 0;
   const dir = sec > 0 ? 1 : -1;
   while (n < words && k + dir >= 0 && k + dir < R.text.length) { k += dir; if (R.isWord[k]) n++; }
-  if (S.mode === 'voice') {
-    highlightSentence(-1);
-    if (playing) voiceStart(k); else setCurrent(k);
-  } else if (playing) { clearFrac(); scrollToToken(k, false); prompter.dirty = true; }
+  if (playing) { clearFrac(); scrollToToken(k, false); prompter.dirty = true; }
   else scrollToToken(k, true);
 }
-function setMode(mode) {
-  if (mode === S.mode) return;
-  const wasPlaying = playing;
-  const a = anchorToken();
-  stopPlayback();
-  S.mode = mode;
-  el.btnVoice.setAttribute('aria-pressed', String(mode === 'voice'));
-  if (mode === 'voice') { tts.cur = a >= 0 ? a : readingToken(); toast('Voix off activée'); }
-  else { clearHighlights(); tts.cur = -1; tts.sent = -1; toast('Défilement sans voix'); }
-  saveSettings(); syncSettingsUI();
-  if (wasPlaying) startPlayback();
-}
-
-/* ------------------------------------------------------------------------
-   13. Surlignage
-   ------------------------------------------------------------------------ */
-function clearHighlights() { $$('.t.hl, .t.hs', el.canvas).forEach(t => t.classList.remove('hl', 'hs')); }
-function highlightSentence(si) {
-  const { sentences } = R;
-  if (tts.sent >= 0 && sentences[tts.sent]) { const [a, b] = sentences[tts.sent]; for (let i = a; i <= b; i++) { const t = R.tokens[i]; if (t) t.classList.remove('hs'); } }
-  tts.sent = si;
-  if (si < 0 || !(S.hl === 'sentence' || S.hl === 'both') || !sentences[si]) return;
-  const [a, b] = sentences[si];
-  for (let i = a; i <= b; i++) { const t = tok(i); if (t) t.classList.add('hs'); }
-}
-function setCurrent(k) {
-  const t = tok(k);
-  if (!t) return;
-  if (tts.cur >= 0 && R.tokens[tts.cur]) R.tokens[tts.cur].classList.remove('hl');
-  tts.cur = k;
-  if (R.sentenceOf && R.sentenceOf[k] !== tts.sent) highlightSentence(R.sentenceOf[k]);
-  if (S.hl === 'word' || S.hl === 'both') t.classList.add('hl');
-  const r = t.getBoundingClientRect();
-  const center = r.top - vpRect().top + r.height / 2;
-  if (Math.abs(center - R.readY) > R.lineH * 0.45) smoothScrollTo(el.viewport.scrollTop + center - R.readY);
-  requestStats();
-}
-
-/* ------------------------------------------------------------------------
-   14. Voix off : voix de l’appareil (Web Speech)
-   ------------------------------------------------------------------------ */
-const synth = window.speechSynthesis || null;
-const tts = { cur: -1, sent: -1, gen: 0, voices: [], voice: null, restartT: 0, waitT: 0 };
-
-/* ----- Voix de l’appareil ----- */
-function voiceTier(v) {
-  const n = (v.name || '').toLowerCase();
-  if (/(espeak|festival|pico|mbrola|compact|novelty|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley|jester|bubbles|bells|bahh|boing|cellos|organ|trinoids|whisper|zarvox|superstar|wobble)/.test(n)) return 0;
-  if (/(natural|neural|naturel|premium|enhanced|amélior|ameliore)/.test(n)) return 3;
-  if (/google/.test(n)) return 3;
-  if (/(microsoft|thomas|audrey|am[ée]lie|aur[ée]lie|marie|daniel|nicolas|jacques|denise|hortense|paul|julie)/.test(n)) return 2;
-  return 1;
-}
-const TIER_LABEL = ['basique', 'correcte', 'bonne', 'très naturelle'];
-const isOnlineVoice = v => v.localService === false;
-function loadVoices() {
-  if (!synth) return;
-  let all = [];
-  try { all = synth.getVoices() || []; } catch (e) { all = []; }
-  tts.voices = all.filter(v => /^fr\b|^fr[-_]/i.test(v.lang || '')).sort((a, b) => (voiceTier(b) - voiceTier(a)) || ((/fr[-_]fr/i.test(b.lang) ? 1 : 0) - (/fr[-_]fr/i.test(a.lang) ? 1 : 0)));
-  pickVoice();
-  renderVoiceSelect();
-}
-function allowedVoices() { return tts.voices.filter(v => S.allowOnline || !isOnlineVoice(v)); }
-function pickVoice() { const ok = allowedVoices(); tts.voice = ok.find(v => v.voiceURI === S.voiceURI) || ok[0] || null; }
-if (synth) {
-  loadVoices();
-  if ('onvoiceschanged' in synth) synth.addEventListener('voiceschanged', loadVoices);
-  let tries = 0;
-  const poll = setInterval(() => { tries++; if (tts.voices.length || tries > 20) clearInterval(poll); else loadVoices(); }, 250);
-}
-
-const systemEngine = {
-  name: 'system',
-  natural: 175,
-  ok() { return !!(synth && tts.voice); },
-  param() { return clamp(S.mpm / this.natural, chunkMode() === 'sentence' ? 0.8 : 0.85, 1.7); },
-  speak(ch, onWord, rate, gen) {
-    return new Promise(resolve => {
-      const u = new SpeechSynthesisUtterance(ch.text);
-      u.voice = tts.voice; u.lang = tts.voice.lang || 'fr-FR'; u.rate = rate; u.pitch = 1; u.volume = 1;
-      let got = false, fb = 0, t0 = 0, done = false;
-      const finish = () => { if (done) return; done = true; clearInterval(fb); resolve(); };
-      u.onstart = () => {
-        t0 = performance.now();
-        fb = setInterval(() => {
-          if (got || gen !== tts.gen) { clearInterval(fb); return; }
-          const el2 = (performance.now() - t0) / 1000;
-          const k = Math.min(ch.b, ch.a + Math.floor(el2 * rate * this.natural / 60 * (ch.b - ch.a + 1) / Math.max(1, ch.words)));
-          onWord(k);
-        }, 110);
-      };
-      u.onboundary = e => {
-        if (gen !== tts.gen || (e.name && e.name !== 'word')) return;
-        got = true;
-        const ci = e.charIndex || 0;
-        let lo = 0, hi = ch.offs.length - 1;
-        while (lo < hi) { const m = (lo + hi + 1) >> 1; if (ch.offs[m] <= ci) lo = m; else hi = m - 1; }
-        onWord(ch.a + lo);
-      };
-      u.onend = finish;
-      u.onerror = e => {
-        if (e.error && e.error !== 'interrupted' && e.error !== 'canceled' && gen === tts.gen) {
-          toast(e.error === 'not-allowed' ? 'Le navigateur bloque la voix : appuyez sur Lecture pour l’autoriser.' : 'Erreur de synthèse vocale : ' + e.error, 4000);
-          stopPlayback();
-        }
-        finish();
-      };
-      tts.utter = u;
-      try { if (synth.paused) synth.resume(); synth.speak(u); } catch (err) { finish(); }
-      /* garde-fou : certaines voix n’envoient jamais « end » */
-      const guard = setInterval(() => { if (done || gen !== tts.gen) { clearInterval(guard); finish(); return; } if (!synth.speaking && !synth.pending && t0 && performance.now() - t0 > 400) { clearInterval(guard); finish(); } }, 500);
-    });
-  },
-  learn(words, spent, rate) { if (spent > 0.6 && words >= 3) this.natural = clamp(this.natural * 0.7 + (words / spent * 60 / rate) * 0.3, 110, 260); },
-  stop() { try { if (synth) synth.cancel(); } catch (e) { /* ignoré */ } }
-};
-
-/* ----- Découpage du texte en segments de lecture et rythme ----- */
-function chunkMode() {
-  const nat = systemEngine.natural;
-  const r = S.mpm / nat;
-  return r >= 0.78 ? 'sentence' : r >= 0.5 ? 'clause' : 'group';
-}
-function buildChunks(fromTok) {
-  const mode = chunkMode();
-  const g = clamp(Math.round(S.mpm / 22), 1, 5);
-  const chunks = [];
-  const { sentences, sentenceOf, isWord } = R;
-  const tokens = R.text;
-  let si = sentenceOf[clamp(fromTok, 0, tokens.length - 1)] || 0;
-  let first = true;
-  for (; si < sentences.length; si++) {
-    let [a, b] = sentences[si];
-    if (first) { a = Math.max(a, fromTok); first = false; }
-    let start = a, words = 0;
-    for (let i = a; i <= b; i++) {
-      if (isWord[i]) words++;
-      const t = tokens[i];
-      const last = i === b;
-      let cut = last;
-      if (!last) {
-        if (mode === 'sentence') cut = i - start >= 40 && CLAUSE_END.test(t);
-        else if (mode === 'clause') cut = (words >= 3 && CLAUSE_END.test(t)) || words >= 9;
-        else cut = words >= g || (words >= Math.max(1, g - 1) && CLAUSE_END.test(t));
-      }
-      if (cut && words > 0) {
-        chunks.push({ a: start, b: i, words, end: last ? 'sentence' : (CLAUSE_END.test(t) ? 'clause' : 'group') });
-        start = i + 1; words = 0;
-      } else if (cut && last && chunks.length) { chunks[chunks.length - 1].b = i; }
-    }
-  }
-  return chunks;
-}
-function chunkText(ch) {
-  if (ch.text) return ch;
-  let text = '';
-  const offs = [];
-  for (let i = ch.a; i <= ch.b; i++) { offs.push(text.length); text += R.text[i] + ' '; }
-  ch.text = text.replace(/[«»“”]/g, '"').trim();
-  ch.offs = offs;
-  return ch;
-}
-const MIN_PAUSE = { sentence: 0.28, clause: 0.16, group: 0.08 };
-function waitMs(ms, gen) {
-  return new Promise(resolve => {
-    clearTimeout(tts.waitT);
-    if (ms <= 0) { resolve(); return; }
-    tts.waitT = setTimeout(resolve, ms);
-    const chk = setInterval(() => { if (gen !== tts.gen) { clearInterval(chk); clearTimeout(tts.waitT); resolve(); } }, 50);
-    setTimeout(() => clearInterval(chk), ms + 60);
-  });
-}
-const NO_SYSTEM_VOICE = () => synth
-  ? 'Aucune voix française n’est installée sur cet appareil (voir Aide › Voix off).'
-  : 'Ce navigateur ne propose pas de voix de synthèse.';
-/** Renvoie { eng, msg } : le moteur utilisable, ou un message expliquant précisément pourquoi aucun ne l’est. */
-async function ensureEngine() {
-  if (systemEngine.ok()) return { eng: systemEngine, msg: '' };
-  return { eng: null, msg: NO_SYSTEM_VOICE() };
-}
-async function voiceStart(fromTok) {
-  const gen = ++tts.gen;
-  systemEngine.stop();
-  clearTimeout(tts.waitT);
-  let eng = systemEngine.ok() ? systemEngine : null;
-  if (!eng) {
-    const r = await ensureEngine();
-    if (gen !== tts.gen) return;
-    eng = r.eng;
-    if (r.msg) toast(r.msg, 6500);
-    if (!eng) { stopPlayback(); return; }
-  }
-  if (!eng.ok()) { toast(NO_SYSTEM_VOICE(), 6000); stopPlayback(); return; }
-  const chunks = buildChunks(fromTok);
-  const param = Math.round(eng.param() * 20) / 20; /* fixé pour toute la séquence : les phrases préparées à l’avance restent valables */
-  for (let i = 0; i < chunks.length; i++) {
-    if (gen !== tts.gen || !playing) return;
-    const ch = chunkText(chunks[i]);
-    setCurrent(ch.a);
-    const t0 = performance.now();
-    try { await eng.speak(ch, k => { if (gen === tts.gen) setCurrent(k); }, param, gen); }
-    catch (e) { if (gen === tts.gen) { toast('Erreur de la voix : ' + e.message, 4000); stopPlayback(); } return; }
-    if (gen !== tts.gen || !playing) return;
-    const spent = (performance.now() - t0) / 1000;
-    eng.learn(ch.words, spent, param);
-    const target = ch.words * 60 / S.mpm;
-    await waitMs(Math.max(MIN_PAUSE[ch.end] || 0.1, target - spent) * 1000, gen);
-  }
-  if (gen === tts.gen && playing) { stopPlayback(); toast('Fin du texte'); }
-}
-function voiceStop() { tts.gen++; clearTimeout(tts.waitT); clearTimeout(tts.restartT); systemEngine.stop(); }
-function restartVoiceSoon() {
-  clearTimeout(tts.restartT);
-  tts.restartT = setTimeout(() => { if (playing && S.mode === 'voice') voiceStart(tts.cur >= 0 ? tts.cur : readingToken()); }, 400);
-}
-function voiceStartToken() {
-  const cur = tts.cur;
-  if (cur >= 0 && tok(cur)) {
-    const r = tok(cur).getBoundingClientRect();
-    if (r.top > 0 && r.bottom < window.innerHeight) return cur;
-  }
-  return readingToken();
-}
-
 /* ------------------------------------------------------------------------
    15. Navigation : Accueil, Importer, Lecture (adresse #/…)
    ------------------------------------------------------------------------ */
@@ -2932,7 +2677,7 @@ function buildToc() {
       const first = h.querySelector('.t');
       const i = first ? tokenIndexOfSpan(first) : -1;
       if (playing) stopPlayback();
-      if (i >= 0) { if (S.mode === 'voice') { highlightSentence(-1); tts.cur = -1; } scrollToToken(i, true); if (S.mode === 'voice') setTimeout(() => setCurrent(i), 400); }
+      if (i >= 0) { scrollToToken(i, true); }
     });
     li.appendChild(b); list.appendChild(li);
   });
@@ -2953,7 +2698,7 @@ function renderFluence() {
   $('#fluenceNote').textContent = DATA.fluenceNote || '';
 }
 function renderFluenceNow() {
-  $('#fluenceNow').textContent = `Réglage actuel : ${Math.round(S.mpm)} MPM = ${nf(pxps(), 1)} px/s × 60 ÷ ${nf(R.ppw, 1)} px par mot (mesuré sur le texte ouvert, avec la police et la taille choisies). Si la voix off est active, son débit et ses pauses sont ajustés pour tenir ce rythme.`;
+  $('#fluenceNow').textContent = `Réglage actuel : ${Math.round(S.mpm)} MPM = ${nf(pxps(), 1)} px/s × 60 ÷ ${nf(R.ppw, 1)} px par mot (mesuré sur le texte ouvert, avec la police et la taille choisies).`;
   $$('.lvl-row').forEach(b => b.classList.toggle('on', Math.abs(S.mpm - +b.dataset.mpm) <= 4));
 }
 
@@ -2994,36 +2739,6 @@ const RANGES = {
   setMaskDim: ['maskDim', v => Math.round(v * 100) + ' %'], setReadLine: ['readLine', v => Math.round(v * 100) + ' %'],
   setImgTime: ['imgTime', v => nf(v, 1) + ' s'], setCountdown: ['countdown', v => v ? Math.round(v) + ' s' : 'aucun']
 };
-function renderVoiceSelect() {
-  const sel = $('#setVoice');
-  sel.replaceChildren();
-  if (!synth) { sel.appendChild(new Option('Synthèse vocale indisponible dans ce navigateur', '')); sel.disabled = true; renderVoiceInfo(); return; }
-  if (!tts.voices.length) { sel.appendChild(new Option('Aucune voix française détectée', '')); sel.disabled = true; renderVoiceInfo(); return; }
-  sel.disabled = false;
-  for (const v of tts.voices) {
-    const online = isOnlineVoice(v);
-    const o = new Option(`${v.name} — ${TIER_LABEL[voiceTier(v)]}${online ? ' · en ligne' : ''}`, v.voiceURI);
-    if (online && !S.allowOnline) { o.disabled = true; o.text += ' (non autorisée)'; }
-    sel.appendChild(o);
-  }
-  if (tts.voice) sel.value = tts.voice.voiceURI;
-  renderVoiceInfo();
-}
-function platformTip() {
-  const ua = navigator.userAgent;
-  if (/Edg\//.test(ua)) return 'Dans Edge, les voix « Microsoft … Online (Natural) » (Denise, Vivienne, Henri…) sont les plus naturelles, mais elles fonctionnent en ligne.';
-  if (/iPhone|iPad|Macintosh/.test(ua)) return 'Sur Mac, iPad et iPhone, installez une voix « Premium » ou « Améliorée » (ex. Audrey) : Réglages › Accessibilité › Contenu énoncé › Voix.';
-  if (/Android/.test(ua)) return 'Sur Android : Paramètres › Accessibilité › Synthèse vocale › Moteur Google › installer les données vocales en français.';
-  if (/Windows/.test(ua)) return 'Sous Windows : Paramètres › Heure et langue › Voix › ajouter une voix française.';
-  return '';
-}
-function renderVoiceInfo() {
-  const info = $('#voiceInfo');
-  if (!synth) { info.textContent = 'Ce navigateur ne propose pas de voix de synthèse.'; return; }
-  if (!tts.voices.length) { info.textContent = 'Aucune voix française installée. ' + platformTip(); return; }
-  if (!tts.voice) { info.textContent = 'Seules des voix en ligne sont disponibles : autorisez-les ci-dessus, ou installez une voix française sur l’appareil.'; return; }
-  info.textContent = `Voix utilisée : ${tts.voice.name} (${TIER_LABEL[voiceTier(tts.voice)]}). ${platformTip()}`;
-}
 function syncSettingsUI() {
   for (const [id, [key, fmt]] of Object.entries(RANGES)) {
     const inp = $('#' + id); const out = $('#out' + id.slice(3));
@@ -3035,12 +2750,8 @@ function syncSettingsUI() {
   $('#setPauses').checked = S.pauses;
   $('#setMarks').checked = S.marks;
   el.sizeRange.value = String(S.size); paintRange(el.sizeRange);
-  $('#setHl').value = S.hl;
-  $('#setOnline').checked = S.allowOnline;
-  el.btnVoice.setAttribute('aria-pressed', String(S.mode === 'voice'));
   el.btnMask.setAttribute('aria-pressed', String(S.mask));
   applyTheme();
-  renderVoiceInfo();
 }
 for (const [id, [key]] of Object.entries(RANGES)) {
   const inp = $('#' + id);
@@ -3068,25 +2779,8 @@ $$('input[name="theme"]').forEach(r => r.addEventListener('change', () => { if (
 $('#setMask').addEventListener('change', e => { S.mask = e.target.checked; positionGuides(); saveSettings(); syncSettingsUI(); });
 $('#setPauses').addEventListener('change', e => { S.pauses = e.target.checked; if (R.text.length) { computeUnits(); prompter.dirty = true; } saveSettings(); });
 $('#setMarks').addEventListener('change', e => { S.marks = e.target.checked; positionGuides(); saveSettings(); });
-$('#setHl').addEventListener('change', e => {
-  S.hl = e.target.value; saveSettings();
-  if (tts.cur >= 0) { const c = tts.cur, s0 = tts.sent; clearHighlights(); tts.cur = -1; tts.sent = -1; if (s0 >= 0) highlightSentence(s0); setCurrent(c); }
-});
-$('#setVoice').addEventListener('change', e => { S.voiceURI = e.target.value; pickVoice(); renderVoiceInfo(); saveSettings(); if (playing && S.mode === 'voice') restartVoiceSoon(); });
-$('#setOnline').addEventListener('change', e => {
-  S.allowOnline = e.target.checked; pickVoice(); renderVoiceSelect(); saveSettings();
-  if (S.allowOnline) toast('Voix en ligne autorisées : le texte lu sera transmis au fournisseur de la voix.', 5000);
-});
-$('#btnTestVoice').addEventListener('click', async () => {
-  if (playing) stopPlayback();
-  const sample = { a: 0, b: 0, words: 14, text: 'Bonjour ! Je suis la voix de Lecture plus. Je lis à ' + Math.round(S.mpm) + ' mots par minute.', offs: [0] };
-  if (!synth || !tts.voice) { renderVoiceInfo(); toast('Aucune voix de l’appareil utilisable.'); return; }
-  try { synth.cancel(); const u = new SpeechSynthesisUtterance(sample.text); u.voice = tts.voice; u.lang = tts.voice.lang; u.rate = systemEngine.param(); synth.speak(u); }
-  catch (e) { toast('Impossible de tester la voix.'); }
-});
 $('#btnResetSettings').addEventListener('click', () => {
-  const keep = { voiceURI: S.voiceURI, allowOnline: S.allowOnline };
-  changeTypography(() => { S = sanitizeSettings(keep); });
+  changeTypography(() => { S = sanitizeSettings(null); });
   applyTheme(); positionGuides(); updateSpeedUI(); saveSettings(); syncSettingsUI();
   toast('Réglages par défaut rétablis.');
 });
@@ -3128,7 +2822,7 @@ async function importBackup(file) {
     if (file.size > 400 * 1024 * 1024) throw new Error('fichier trop volumineux');
     const data = JSON.parse(await file.text());
     if (!data || data.app !== APP.name) throw new Error('ce fichier n’est pas une sauvegarde Lecture+');
-    if (data.settings) { S = sanitizeSettings(data.settings); store.set('settings', S); applyTheme(); applyTypography(); pickVoice(); syncSettingsUI(); updateSpeedUI(); }
+    if (data.settings) { S = sanitizeSettings(data.settings); store.set('settings', S); applyTheme(); applyTypography(); syncSettingsUI(); updateSpeedUI(); }
     let n = 0;
     const docs = Array.isArray(data.docs) ? data.docs : (data.document ? [Object.assign({ kind: 'json' }, data.document)] : []);
     for (const d of docs) {
@@ -3144,14 +2838,13 @@ async function importBackup(file) {
   finally { busy(false); el.importInput.value = ''; }
 }
 async function wipeAll() {
-  if (!window.confirm('Effacer toutes les données de Lecture+ sur cet appareil : bibliothèque, positions de lecture, réglages et voix téléchargées ?')) return;
+  if (!window.confirm('Effacer toutes les données de Lecture+ sur cet appareil : bibliothèque, positions de lecture et réglages ?')) return;
   stopPlayback(true);
   store.clearAll();
   await lib.clear();
-  try { await caches.delete('lectureplus-voix-v1'); } catch (e) { /* ignoré */ }
   try { if (window.indexedDB) indexedDB.deleteDatabase('lectureplus_v1'); } catch (e) { /* ignoré */ }
   S = sanitizeSettings(null);
-  applyTheme(); applyTypography(); pickVoice(); renderVoiceSelect(); syncSettingsUI(); updateSpeedUI();
+  applyTheme(); applyTypography(); syncSettingsUI(); updateSpeedUI();
   R.meta = null; el.canvas.replaceChildren();
   $$('dialog[open]').forEach(d => d.close());
   location.hash = '#/'; renderHome();
@@ -3176,7 +2869,7 @@ function openDialog(d) {
 /* Le panneau Réglages ne bloque pas la page : la lecture continue et chaque changement est visible aussitôt.
    La zone de lecture se décale pour rester entièrement visible à côté (ou au-dessus sur mobile). */
 function openSettings() {
-  buildFontSelect(); syncSettingsUI(); renderVoiceSelect();
+  buildFontSelect(); syncSettingsUI();
   const d = el.dlgSettings;
   if (d.open) { d.close(); return; }
   try { d.show(); } catch (e) { d.setAttribute('open', ''); }
@@ -3216,7 +2909,6 @@ el.btnSize.addEventListener('click', () => {
   if (open) { clearTimeout(chrome.hideT); setTimeout(() => el.sizeRange.focus({ preventScroll: true }), 30); } else scheduleHide();
 });
 document.addEventListener('pointerdown', e => { if (el.sizePop.classList.contains('open') && !el.sizePop.contains(e.target) && e.target !== el.btnSize && !el.btnSize.contains(e.target)) { closeSizePop(); scheduleHide(); } });
-el.btnVoice.addEventListener('click', () => setMode(S.mode === 'voice' ? 'scroll' : 'voice'));
 el.btnMask.addEventListener('click', () => { S.mask = !S.mask; positionGuides(); saveSettings(); syncSettingsUI(); toast(S.mask ? 'Masque de lecture activé' : 'Masque de lecture désactivé', 1400); });
 function toggleFullscreen() {
   const d = document;
@@ -3289,9 +2981,8 @@ document.addEventListener('keydown', e => {
     case 'ArrowLeft': e.preventDefault(); jump(-10); break;
     case 'ArrowRight': e.preventDefault(); jump(10); break;
     case 'f': case 'F': e.preventDefault(); toggleFullscreen(); break;
-    case 'v': case 'V': setMode(S.mode === 'voice' ? 'scroll' : 'voice'); break;
     case 'm': case 'M': S.mask = !S.mask; positionGuides(); saveSettings(); syncSettingsUI(); break;
-    case 'Home': e.preventDefault(); if (playing) stopPlayback(); highlightSentence(-1); clearHighlights(); tts.cur = -1; smoothScrollTo(0); break;
+    case 'Home': e.preventDefault(); if (playing) stopPlayback(); smoothScrollTo(0); break;
     case 'End': e.preventDefault(); if (playing) stopPlayback(); smoothScrollTo(maxScroll()); break;
     default: break;
   }
@@ -3394,7 +3085,6 @@ async function init() {
   buildFontSelect();
   renderFluence();
   syncSettingsUI();
-  renderVoiceSelect();
   setPlayUI();
   $('#appVersion').textContent = APP.version;
   await migrateV1();
@@ -3405,7 +3095,7 @@ async function init() {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (document.body.dataset.view === 'reader') scheduleLayout(); }).catch(() => {});
   if (!lsOK) toast('Stockage local indisponible : vos réglages ne seront pas conservés après fermeture.', 5000);
   await route();
-  window.__lecturePlus = { R, settings: () => S, tts, lib, chrome, prompter, readingToken, version: APP.version };
+  window.__lecturePlus = { R, settings: () => S, lib, chrome, prompter, readingToken, version: APP.version };
 }
 init();
 })();

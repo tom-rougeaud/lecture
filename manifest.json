@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Lecture+",
   "short_name": "Lecture+",
-  "description": "Prompteur de lecture accessible, voix off avec surlignage, guide de fluence et bibliothèque personnelle. Tout fonctionne sur l’appareil.",
+  "description": "Prompteur de lecture accessible, guide de fluence et bibliothèque personnelle. Tout fonctionne sur l’appareil.",
   "lang": "fr",
   "dir": "ltr",
   "start_url": "./",
