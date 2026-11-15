@@ -982,7 +982,7 @@ this.attribute(att));if(0===node.children.length||node.children.every(function(e
 (() => {
 'use strict';
 
-const APP = { name: 'Lecture+', version: '2.4.0', key: 'lectureplus.v2', idb: 'lectureplus_v2' };
+const APP = { name: 'Lecture+', version: '2.4.1', key: 'lectureplus.v2', idb: 'lectureplus_v2' };
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -1048,7 +1048,7 @@ const THEME_BG = { light: '#f7f7f4', beige: '#f4eee3', sepia: '#eadbbf', dark: '
 
 const DEFAULTS = {
   theme: 'beige', contrast: 50, font: 'lexend', size: 1.6, lh: 1.7, ws: 0.06, ls: 0, width: 64,
-  mpm: 110, mode: 'scroll', mask: false, maskLines: 2, maskBlur: 6, maskDim: 0.45, readLine: 0.42,
+  mpm: 110, mode: 'scroll', mask: true, maskLines: 2, maskBlur: 6, maskDim: 0.45, readLine: 0.42,
   imgTime: 1.5, countdown: 3, pauses: true, marks: true
 };
 const SCHEMA = {

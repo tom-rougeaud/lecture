@@ -1,7 +1,7 @@
 /* Lecture+ — service worker : ouverture hors connexion.
    Il ne met en cache que les fichiers de l’application (aucune donnée personnelle). */
 'use strict';
-const APP_CACHE = 'lectureplus-app-v2.4.0';
+const APP_CACHE = 'lectureplus-app-v2.4.1';
 const CORE = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
